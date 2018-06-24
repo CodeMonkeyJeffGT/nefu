@@ -50,6 +50,8 @@ class UserController extends Controller
 
     public function wxIn(Request $request, SessionInterface $session)
     {
+        $appid = $request->server->get('WX_APPID');
+        $secret = $request->server->get('WX_SECRET');
         $wechat = new Wechat($appid, $secret, false);
         if ( ! $request->request->has('code')) {
             $redirectUri = $this->generateUrl(
