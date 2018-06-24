@@ -50,12 +50,6 @@ class UserController extends Controller
 
     public function wxIn(Request $request, SessionInterface $session)
     {
-        $appid = $request->server->get('WX_APPID');
-        $secret = $request->server->get('WX_SECRET');
-        echo '<pre>';
-        var_dump(array(
-            $appid, $secret
-        ));
         $wechat = new Wechat($appid, $secret, false);
         if ( ! $request->request->has('code')) {
             $redirectUri = $this->generateUrl(
@@ -64,6 +58,7 @@ class UserController extends Controller
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
             $url = $wechat->code($redirectUri, false);
+            echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
             return $this->redirect($url);
         } else {
             $code = $request->request->has('code');
