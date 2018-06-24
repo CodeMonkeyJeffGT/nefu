@@ -1,0 +1,21 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\UserController::index
+wxIn:
+    path: /wxIn
+    controller: App\Controller\UserController::wxIn
+sign:
+    path: /sign
+    controller: App\Controller\UserController::sign
+signOut:
+    path: /signOut
+    controller: App\Controller\UserController::signOut
+score:
+    path: /score
+    controller: App\Controller\OpeController::score
+lesson:
+    path: /lesson
+    controller: App\Controller\OpeController::lesson

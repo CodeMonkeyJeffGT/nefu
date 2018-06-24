@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>成绩</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row clearfix">
+					<div class="col-md-3 column">
+						<div class="jumbotron" style="background-color: rgb(235, 255, 235); margin-bottom: 0px; padding: 15px">
+							<table style="width: 250px;">
+								<tr><th>学期</th><th>加权<br>(含公选)</th><th>加权<br>(不含公选)</th></tr>
+							<?php foreach($score_all as $key => $value){ if(is_array($value)){ ?>
+								<tr><td><?=$key?></td><td><?=$value['avg']?></td><td><?=$value['avg_spe']?></td>
+							<?php }}?>
+								<tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr>
+								<tr><th>学年</th><th>加权<br>(含公选)</th><th>加权<br>(不含公选)</th></tr>
+							<?php foreach($terms as $value){ if(is_array($value)){ ?>
+								<tr><td><?=$value['term']?></td><td><?=$value['avg']?></td><td><?=$value['avg_spe']?></td>
+							<?php }}?>
+							</table>
+							<br>
+							<span style="font-size:16px">总加权：<big><?=$score_all['avg']?></big></span>
+						</div>
+					</div>
+					<div class="col-md-9 column">
+						<?php foreach($score_item as $key => $value){ if( ! isset($score_all[$key])){ ?>
+						<hr>
+						<label><?=$key?></label>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>课程名称（阶段成绩）</th>
+									<th>阶1</th>
+									<th>阶2</th>
+									<th>阶3</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php for($i = 0, $len = count($value); $i < $len; $i++) { if(is_array($value[$i])){ ?>
+								<tr>
+									<td><?=$value[$i][2]?></td>
+									<td><?=$value[$i][4]?></td>
+									<td><?=$value[$i][5]?></td>
+									<td><?=$value[$i][6]?></td>
+								</tr>
+								<?php }} ?>
+							</tbody>
+						</table>
+						<?php }}?>
+						<?php $score_all = array_reverse($score_all);  foreach($score_all as $key => $value){ if(is_array($value)){ ?>
+						<hr>
+						<label><?=$key?></label>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>课程名称（总成绩）</th>
+									<th>成绩</th>
+									<th>学分</th>
+									<th>属性</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php for($i = 0, $len = count($value); $i < $len; $i++) { if(is_array($value[$i])){ ?>
+								<tr>
+									<td><?=$value[$i]['name']?></td>
+									<td><?=$value[$i]['score']?></td>
+									<td><?=$value[$i]['num']?></td>
+									<td><?=$value[$i]['att']?></td>
+								</tr>
+								<?php }} ?>
+							</tbody>
+						</table>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>课程名称（阶段成绩）</th>
+									<th>阶1</th>
+									<th>阶2</th>
+									<th>阶3</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php for($i = 0, $len = count($score_item[$key]); $i < $len; $i++) { if(is_array($score_item[$key][$i])){ ?>
+								<tr>
+									<td><?=$score_item[$key][$i][2]?></td>
+									<td><?=$score_item[$key][$i][4]?></td>
+									<td><?=$score_item[$key][$i][5]?></td>
+									<td><?=$score_item[$key][$i][6]?></td>
+								</tr>
+								<?php }} ?>
+							</tbody>
+						</table>
+						<?php }}?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
