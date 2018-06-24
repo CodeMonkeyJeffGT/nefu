@@ -52,6 +52,10 @@ class UserController extends Controller
     {
         $appid = $request->server->get('WX_APPID');
         $secret = $request->server->get('WX_SECRET');
+        echo '<pre>';
+        var_dump(array(
+            $appid, $secret
+        ));
         $wechat = new Wechat($appid, $secret, false);
         if ( ! $request->request->has('code')) {
             $redirectUri = $this->generateUrl(
@@ -65,6 +69,7 @@ class UserController extends Controller
             $code = $request->request->has('code');
             $info = $wechat->base($code);
             $openid = $info['openid'];
+
         }
     }
 
