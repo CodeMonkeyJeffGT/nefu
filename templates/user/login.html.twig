@@ -62,8 +62,8 @@
 				url : '{{ loginUrl }}',
 				method : 'post',
 				data : {
-					acc : $('#acc').val(),
-					pwd : $('#pwd').val()
+					account : $('#acc').val(),
+					password : $.md5($('#pwd').val()).toUpperCase()
 				},
 				success : function(result)
 				{
@@ -71,21 +71,18 @@
 					 * true : 成功
 					 */
 					document.getElementById('btn').disabled = false;
-					if(result === true)
+					if(result.code == 0)
 					{
 						window.location.assign('{{ transferPage }}');
 					}
-					else if(result === 'error')
-					{
-						alert('教务系统服务器异常');
-					}
 					else
 					{
-						alert('密码错误');
+						alert(result.msg);
 					}
 				},
 				error : function(err, a, b)
 				{
+					document.getElementById('btn').disabled = false;
 					alert('未知异常，请稍后重试');
 				}
 			});

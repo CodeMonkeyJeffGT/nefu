@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Controller\BaseController as Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Nefu\Nefuer;
 
 class ScoreController extends Controller
 {
