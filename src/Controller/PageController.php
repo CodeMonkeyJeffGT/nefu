@@ -10,9 +10,23 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PageController extends Controller
 {
-
-    public function login(): Response
+    public function sign(): Response
     {
-        return $this->render('user/login.html.twig');
+        return $this->render('page/sign.html.twig');
+    }
+
+    public function score(): Response
+    {
+        return $this->render('page/score.html.twig');
+    }
+
+    public function lesson(): Response
+    {
+        return $this->render('page/lesson.html.twig');
+    }
+
+    public function oauth(): Response
+    {
+        return $this->render('page/oauth.html.twig');
     }
 }

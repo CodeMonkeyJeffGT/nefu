@@ -23,6 +23,9 @@ page-score:
 page-lesson:
     path: /lesson
     controller: App\Controller\PageController::lesson
+page-sign:
+    path: /sign
+    controller: App\Controller\PageController::sign
 page-oauth:
     path: /oauth
     controller: App\Controller\PageController::oauth

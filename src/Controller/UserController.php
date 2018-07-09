@@ -40,11 +40,8 @@ class UserController extends Controller
                 array(),
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
-            echo $redirectUri;die;
             $url = $wechat->code($redirectUri, false);
-            return $this->toUrl(array(
-                'url' => $url
-            ), '自动登录中');
+            return $this->toUrl($url, '自动登录中');
         } else {
             //5、保存openid至session
             $code = $this->request->request->has('code');
