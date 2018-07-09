@@ -4,134 +4,116 @@ namespace App\Controller;
 
 use App\Controller\BaseController as Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Nefu\Nefuer;
 use Wechat\Wechat;
 
 class UserController extends Controller
 {
+    /**
+     * 2、判断是否微信打开
+     */
     public function index(): Response
     {
-        $flashBag = $this->session->getFlashBag();
-        $ope     = $flashBag->get('ope', array(null))[0];
-        $opeType = $flashBag->get('opeType', array(null))[0];
-        
-        $ope     = $ope     ?? $this->request->query->get('ope', '/');
-        $opeType = $opeType ?? $this->request->query->get('opeType', 'abstractUrl');
-        
-        if ($this->session->has('student')) {
-            return $this->redirect($this->buildRedirectUrl($ope, $opeType));
+        if ($this->session->has('openid')) {
+            return $this->signByOpenid($this->request, $this->session);
+        } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            return $this->wxIn();
         } else {
-            $flashBag->add('ope', $ope);
-            $flashBag ->add('opeType', $opeType);
-            if ($this->session->has('openid')) {
-                return $this->signByWx($this->request, $this->session);
-            } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-                return $this->wxIn();
-            } else {
-                return $this->toSign();
-            }
+            return $this->toSign();
         }
     }
 
-    public function login(): Response
-    {
-        return $this->render('user/login.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
-
+    /**
+     * 3、微信登录
+     */
     public function wxIn(): Response
     {
         $appid = $this->request->server->get('WX_APPID');
         $secret = $this->request->server->get('WX_SECRET');
         $wechat = new Wechat($appid, $secret, false);
         if ( ! $this->request->request->has('code')) {
+            //4、获取openid
             $redirectUri = $this->generateUrl(
                 'wxIn',
                 array(),
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
+            echo $redirectUri;die;
             $url = $wechat->code($redirectUri, false);
             return $this->toUrl(array(
                 'url' => $url
             ), '自动登录中');
         } else {
+            //5、保存openid至session
             $code = $this->request->request->has('code');
             $info = $wechat->base($code);
             $openid = $info['openid'];
-
-        }
-    }
-
-    /**
-     * 登录
-     */
-    public function sign() {
-        $flashBag = $this->session->getFlashBag();
-        if (is_null($account) && ! $this->request->request->has('account')) {
-            $ope     = $flashBag->get('ope', array(null))[0];
-            $opeType = $flashBag->get('opeType', array(null))[0];
-            return $this->render('User/login.html.twig', array(
-                'loginUrl' => $this->generateUrl('sign'),
-                'transferPage' => $this->buildRedirectUrl($ope, $opeType),
-            ));
-        } else {
-            $account  = $account  ?? $this->request->request->get('account');
-            $password = $password ?? $this->request->request->get('password');
-
-            if (empty($account)) {
-                return $this->json(array(
-                    'code' => 1,
-                    'msg' => '账号不能为空',
-                ));
-            }
-
-            $nefuer = new Nefuer();
-            $login = $nefuer->login($account, $password);
-            $loginStatus = false;
-            if ($login['code'] == 0) {
-                $loginStatus = true;
-                // $this->session->set('student', array(
-                //     ''
-                // ))
-
-
-            }
-
-            if ($loginStatus && $this->request->request->has('account')) {
-                //$this->session todo
-            } elseif($loginStatus) {
-
-            } elseif ($this->request->request->has('account')) {
-                //return json
-            } else {
-                //return false
-            }
+            $this->session->set('nefuer_openid', $openid);
+            return $this->signByOpenid();
         }
     }
 
     /**
      * 通过openid登录
      */
-    private function signByWx()
+    private function signByOpenid()
     {
         $openid = $this->session->get('openid');
+        //6、根据openid获取用户信息
+
+        //8、检查是否绑定
+        if(true/* condition */) {
+            //9、绑定：登录
+            $rst = $this->sign($account, $password);
+            var_dump($rst);die;
+        } else {
+            //14、未绑定，返回失败
+        }
+        
     }
 
-    private function buildRedirectUrl($ope, $opeType = 'absoluteUrl'): string
+    /**
+     * 登录
+     */
+    public function sign($account = null, $password = null)
     {
-        if ($opeType === 'absoluteUrl' && strpos($ope, '://') !== false) {
-            $opeType = 'route';
+        if (is_null($password)) {
+            if (empty($account)) {
+                return $this->json(array(
+                    'code' => 1,
+                    'msg' => '账号不能为空',
+                ));
+            }
+            if (empty($password)) {
+                return $this->json(array(
+                    'code' => 1,
+                    'msg' => '密码不能为空',
+                ));
+            }
+            $account  = $this->request->request->get('account');
+            $password = $this->request->request->get('password');
+            $passsword = strtoupper(md5($password));
         }
-        switch ($opeType) {
-            case 'route':
-                return $this->generateUrl($ope);
-            case 'uri':
-                //no break;
-            default:
-                return $ope;
-            case 'absoluteUrl':
-                return sprintf('%s?acc=', $ope, $acc, $name);
+
+        $nefuer = new Nefuer();
+        $login = $nefuer->login($account, $password);
+        $loginStatus = false;
+        if ($login['code'] == 0) {
+            $loginStatus = true;
+            // $this->session->set('student', array(
+            //     ''
+            // ))
+        }
+
+        if ($loginStatus && $this->request->request->has('account')) {
+            //$this->session todo
+        } elseif($loginStatus) {
+
+        } elseif ($this->request->request->has('account')) {
+            //return json
+        } else {
+            //return false
         }
     }
 }

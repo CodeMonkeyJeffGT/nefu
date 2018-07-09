@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -58,9 +59,9 @@ class BaseController extends Controller
      * @param string        $message    提示信息
      * @param mixed         $code       返回类型代码
      * 
-     * @return Response
+     * @return JsonResponse
      */
-    protected function success($data = null, string $message = null, $code = null): Response
+    protected function success($data = null, string $message = null, $code = null): JsonResponse
     {
         return $this->return($data, $code, $message);
     }
@@ -71,9 +72,9 @@ class BaseController extends Controller
      * @param mixed         $code       返回类型代码
      * @param mixed         $data       返回数据
      * 
-     * @return Response
+     * @return JsonResponse
      */
-    protected function error($code = null, string $message = null, $data = null): Response
+    protected function error($code = null, string $message = null, $data = null): JsonResponse
     {
         $code = $code ?? static::ERROR;
         return $this->return($data, $code, $message);
@@ -85,9 +86,9 @@ class BaseController extends Controller
      * @param mixed         $data       返回数据
      * @param mixed         $code       返回类型代码
      * 
-     * @return Response
+     * @return JsonResponse
      */
-    protected function toSign(string $message = null, $data = null, $code = null): Response
+    protected function toSign(string $message = null, $data = null, $code = null): JsonResponse
     {
         $code = $code ?? static::TO_SIGN;
         return $this->return($data, $code, $message);
@@ -99,9 +100,9 @@ class BaseController extends Controller
      * @param mixed         $data       返回数据        array('url' => $url);
      * @param mixed         $code       返回类型代码
      * 
-     * @return Response
+     * @return JsonResponse
      */
-    protected function toUrl(string $message = null, $data = null, $code = null): Response
+    protected function toUrl(string $message = null, $data = null, $code = null): JsonResponse
     {
         $code = $code ?? static::REDIRECT;
         return $this->return($data, $code, $message);
@@ -113,9 +114,9 @@ class BaseController extends Controller
      * @param mixed         $code       返回类型代码
      * @param string        $message    提示信息
      * 
-     * @return Response
+     * @return JsonResponse
      */
-    protected function return($data = null, $code = null, string $message = null): Response
+    protected function return($data = null, $code = null, string $message = null): JsonResponse
     {
         $code    = $code ?? static::OK;
         $message = $message ?? $this->errMsg[$code];

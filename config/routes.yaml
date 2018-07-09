@@ -1,21 +1,31 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
 index:
-    path: /
-    controller: App\Controller\UserController::index
+   path: /
+   controller: App\Controller\UserController::index
 wxIn:
     path: /wxIn
     controller: App\Controller\UserController::wxIn
 sign:
-    path: /sign
+    path: /api/v1/sign
     controller: App\Controller\UserController::sign
 signOut:
-    path: /signOut
+    path: /api/v1/signOut
     controller: App\Controller\UserController::signOut
 score:
-    path: /score
+    path: /api/v1/score
     controller: App\Controller\OpeController::score
 lesson:
-    path: /lesson
+    path: /api/v1/lesson
     controller: App\Controller\OpeController::lesson
+
+index:
+    path: /
+    controller: App\Controller\PageController::score
+score:
+    path: /score
+    controller: App\Controller\PageController::score
+lesson:
+    path: /lesson
+    controller: App\Controller\PageController::lesson
+oauth:
+    path: /oauth
+    controller: App\Controller\PageController::oauth
