@@ -19,6 +19,22 @@ class ScoreAllRepository extends ServiceEntityRepository
         parent::__construct($registry, ScoreAll::class);
     }
 
+    public function listScores($account)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT `score` `score`, `l`.`name` `lesson`, `s`.`term` `term`
+            FROM `score_all` `s`
+            LEFT JOIN `lesson` `l`
+            ON `l`.`id` = `s`.`lesson_id`
+            WHERE `account` = :account
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'account' => $account,
+        ));
+        return $stmt->fetchAll();
+    }
+
 //    /**
 //     * @return ScoreAll[] Returns an array of ScoreAll objects
 //     */

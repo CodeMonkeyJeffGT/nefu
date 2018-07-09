@@ -19,23 +19,6 @@ class LessonRepository extends ServiceEntityRepository
         parent::__construct($registry, Lesson::class);
     }
 
-    public function listScores($account)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT `r`.`id` `id`,
-            `o`.`status` `os`, `o`.`in_date` `check_date`, `o`.`days` `bookDays`,
-            `b`.`status` `bs`, `b`.`book_date` `book_date`, `b`.`days` `checkDays`
-            FROM `room` `r`
-            LEFT JOIN `occupancy` `o` ON `o`.`r_id` = `r`.`id`
-            LEFT JOIN `booking` `b` ON `b`.`r_id` = `r`.`id`
-            WHERE `r`.`id` = :id';
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(array(
-            'id' => $roomId,
-        ));
-        return $stmt->fetchAll();
-    }
-
 //    /**
 //     * @return Lesson[] Returns an array of Lesson objects
 //     */
