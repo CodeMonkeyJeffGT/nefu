@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ScoreController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $nefuer = $this->getNefuer();
         if (false == $nefuer) {
@@ -16,7 +16,10 @@ class ScoreController extends Controller
         }
         $scoreAll = $nefuer->scoreAll();
         $scoreItem = $nefuer->scoreItem();
-        $this->setCookie($nefuer->getCookie());
-
+        $this->session->set('nefuer_cookie', ($nefuer->getCookie()));
+        return $this->success(array(
+            'all' => $scoreAll,
+            'item' => $scoreItem,
+        ));
     }
 }

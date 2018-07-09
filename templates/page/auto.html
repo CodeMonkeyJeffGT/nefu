@@ -22,7 +22,6 @@
                                 'success': function(result) {
                                     switch (result.code) {
                                         case 6:
-                                            $('html').html(result.message);
                                             window.location.assign(result.data);
                                             return false;
                                         case 1:

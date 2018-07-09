@@ -70,7 +70,6 @@
 					document.getElementById('btn').disabled = false;
 					switch (result.code) {
 						case 6:
-							$('html').html(result.message);
 							window.location.assign(result.data);
 							return false;
 						case 1:
@@ -84,8 +83,13 @@
 							alert(result.message + "\n错误代码：" + result.code);
 							return false;
 					}
-					history.back();
-					location.reload();
+					if (document.referrer.substr(document.referrer.length - 4, 4) == 'auto') {
+						history.go(-2);
+					} else {
+						history.go(-1);
+					}
+					window.location.reload();
+					return false;
 				}
 			});
 		}
