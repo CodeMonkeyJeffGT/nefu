@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * 页面控制器，只加载页面
  */
-class BaseController extends Controller
+class PageController extends Controller
 {
 
     public function login(): Response

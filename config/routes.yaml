@@ -12,20 +12,17 @@ signOut:
     controller: App\Controller\UserController::signOut
 score:
     path: /api/v1/score
-    controller: App\Controller\OpeController::score
+    controller: App\Controller\ScoreController::index
 lesson:
     path: /api/v1/lesson
-    controller: App\Controller\OpeController::lesson
+    controller: App\Controller\LessonController::index
 
-index:
-    path: /
-    controller: App\Controller\PageController::score
-score:
+page-score:
     path: /score
     controller: App\Controller\PageController::score
-lesson:
+page-lesson:
     path: /lesson
     controller: App\Controller\PageController::lesson
-oauth:
+page-oauth:
     path: /oauth
     controller: App\Controller\PageController::oauth
