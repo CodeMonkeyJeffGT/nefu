@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,23 +10,26 @@ use Nefu\Nefuer;
 
 /**
  * 基础类，提供基本方法
- * @method Response success($data = null, string $message = null, $code = null)
- * @method Response error($code = null, string $message = null, $data = null)
- * @method Response toSign(string $message = null, $data = null, $code = null)
- * @method Response toUrl(string $message = null, $data = null, $code = null)
- * @method Response return($data = null, string $message = null, $code = null)
+ * @method JsonResponse success($data = null, string $message = null, $code = null)
+ * @method JsonResponse error($code = null, string $message = null, $data = null)
+ * @method JsonResponse toSign(string $message = null, $data = null, $code = null)
+ * @method JsonResponse toUrl(string $message = null, $data = null, $code = null)
+ * @method JsonResponse return($data = null, string $message = null, $code = null)
  */
-class BaseController extends Controller
+abstract class BaseController extends Controller
 {
     protected $request;
     protected $session;
 
-    public const OK         = 0;
-    public const REDIRECT   = 302;
-    public const TO_SIGN    = 403;
-    public const ERROR      = 500;
+    public const OK = 0;
+    public const TO_SIGN = 1;
+    public const ERROR = 2;
+    public const FORBIDEN = 3;
+    public const PARAM_MISS = 4;
+    public const INVALID_ARGUMENT = 5;
+    public const REDIRECT = 6;
 
-    private $errMsg;
+    private $errMsg = array();
     
     /**
      * 设置 request 和 session
@@ -47,22 +49,25 @@ class BaseController extends Controller
     protected function setErrMsg($errMsg = array())
     {
         $this->errMsg = array(
-            static::OK         => 'OK',
-            static::REDIRECT   => '自动跳转中，请稍候',
-            static::TO_SIGN    => '请登录',
-            static::ERROR      => '出错了',
-        ) + $errMsg;
+            static::OK => 'OK',
+            static::TO_SIGN => '请登录',
+            static::ERROR => '出错了',
+            static::FORBIDEN => '您没有权限这么做',
+            static::PARAM_MISS => '参数缺失',
+            static::INVALID_ARGUMENT => '参数不合法',
+            static::REDIRECT => '自动跳转中，请稍候',
+        ) + $this->errMsg + $errMsg;
     }
 
     /**
-     * 检查登录
+     * 获取nefuer对象
      */
     protected function getNefuer()
     {
-        $acc = $this->session->get('nefuer_acc', null);
-        $pwd = $this->session->get('nefuer_pwd', null);
+        $account = $this->session->get('nefuer_account', null);
+        $password = $this->session->get('nefuer_password', null);
         $cookie = $this->session->get('nefuer_cookie', null);
-        if (in_array(null, array($acc, $pwd, $cookie))) {
+        if (in_array(null, array($account, $password, $cookie))) {
             return false;
         }
         $nefuer = new Nefuer();
@@ -143,4 +148,5 @@ class BaseController extends Controller
             'message' => $message,
         ));
     }
+
 }

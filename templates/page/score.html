@@ -83,20 +83,21 @@
 				'method': 'get',
 				'success': function(result) {
 					switch (result.code) {
-						case 302:
+						case 6:
 							$('html').html(result.message);
 							window.location.assign(result.data);
 							return false;
-						case 403:
+						case 1:
 							window.location.assign('/sign');
 							return false;
-						case 500:
+						case 0:
+							break;
+						case 2:
 							//no break;
 						default:
 							alert(result.message + "\n错误代码：" + result.code);
 							return false;
 					}
-					
 				},
 				'error': function(err) {
 					console.log(err);

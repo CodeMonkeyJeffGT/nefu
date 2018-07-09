@@ -29,4 +29,9 @@ class PageController extends Controller
     {
         return $this->render('page/oauth.html');
     }
+
+    public function auto(): Response
+    {
+        return $this->render('page/auto.html');
+    }
 }

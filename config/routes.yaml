@@ -4,6 +4,9 @@ index:
 wxIn:
     path: /api/v1/wxIn
     controller: App\Controller\UserController::wxIn
+checkSign:
+    path: /api/v1/checkSign
+    controller: App\Controller\UserController::checkSign
 sign:
     path: /api/v1/sign
     controller: App\Controller\UserController::sign
@@ -32,3 +35,6 @@ page-sign:
 page-oauth:
     path: /oauth
     controller: App\Controller\PageController::oauth
+page-auto:
+    path: /auto
+    controller: App\Controller\PageController::auto

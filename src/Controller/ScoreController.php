@@ -12,7 +12,7 @@ class ScoreController extends Controller
     {
         $nefuer = $this->getNefuer();
         if (false == $nefuer) {
-            return $this->redirectToRoute('index');
+            return $this->toUrl('/auto');
         }
         $scoreAll = $nefuer->scoreAll();
         $scoreItem = $nefuer->scoreItem();
