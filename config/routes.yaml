@@ -1,8 +1,8 @@
 index:
-   path: /
+   path: /api/v1/
    controller: App\Controller\UserController::index
 wxIn:
-    path: /wxIn
+    path: /api/v1/wxIn
     controller: App\Controller\UserController::wxIn
 sign:
     path: /api/v1/sign
@@ -19,6 +19,9 @@ lesson:
 
 page-score:
     path: /score
+    controller: App\Controller\PageController::score
+page-index:
+    path: /
     controller: App\Controller\PageController::score
 page-lesson:
     path: /lesson

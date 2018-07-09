@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Nefu\Nefuer;
 
 /**
  * 基础类，提供基本方法
@@ -51,6 +52,22 @@ class BaseController extends Controller
             static::TO_SIGN    => '请登录',
             static::ERROR      => '出错了',
         ) + $errMsg;
+    }
+
+    /**
+     * 检查登录
+     */
+    protected function getNefuer()
+    {
+        $acc = $this->session->get('nefuer_acc', null);
+        $pwd = $this->session->get('nefuer_pwd', null);
+        $cookie = $this->session->get('nefuer_cookie', null);
+        if (in_array(null, array($acc, $pwd, $cookie))) {
+            return false;
+        }
+        $nefuer = new Nefuer();
+        $nefuer->login($account, $password, $cookie);
+        return $nefuer;
     }
 
     /**
@@ -102,7 +119,7 @@ class BaseController extends Controller
      * 
      * @return JsonResponse
      */
-    protected function toUrl(string $message = null, $data = null, $code = null): JsonResponse
+    protected function toUrl($data = null, string $message = null, $code = null): JsonResponse
     {
         $code = $code ?? static::REDIRECT;
         return $this->return($data, $code, $message);

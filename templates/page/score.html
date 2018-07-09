@@ -15,29 +15,24 @@
 <body>
 	<div class="container">
 		<div class="row clearfix">
-			<div class="col-md-12 column">
+			<div class="col-md-12 column" style="display: none">
 				<div class="row clearfix">
 					<div class="col-md-3 column">
 						<div class="jumbotron" style="background-color: rgb(235, 255, 235); margin-bottom: 0px; padding: 15px">
 							<table style="width: 250px;">
 								<tr><th>学期</th><th>加权<br>(含公选)</th><th>加权<br>(不含公选)</th></tr>
-							<?php foreach($score_all as $key => $value){ if(is_array($value)){ ?>
-								<tr><td><?=$key?></td><td><?=$value['avg']?></td><td><?=$value['avg_spe']?></td>
-							<?php }}?>
+								<tr><td></td><td></td><td></td>
 								<tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr>
 								<tr><th>学年</th><th>加权<br>(含公选)</th><th>加权<br>(不含公选)</th></tr>
-							<?php foreach($terms as $value){ if(is_array($value)){ ?>
-								<tr><td><?=$value['term']?></td><td><?=$value['avg']?></td><td><?=$value['avg_spe']?></td>
-							<?php }}?>
+								<tr><td></td><td></td><td></td>
 							</table>
 							<br>
-							<span style="font-size:16px">总加权：<big><?=$score_all['avg']?></big></span>
+							<span style="font-size:16px">总加权：<big></big></span>
 						</div>
 					</div>
 					<div class="col-md-9 column">
-						<?php foreach($score_item as $key => $value){ if( ! isset($score_all[$key])){ ?>
 						<hr>
-						<label><?=$key?></label>
+						<label></label>
 						<table class="table">
 							<thead>
 								<tr>
@@ -48,20 +43,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php for($i = 0, $len = count($value); $i < $len; $i++) { if(is_array($value[$i])){ ?>
 								<tr>
-									<td><?=$value[$i][2]?></td>
-									<td><?=$value[$i][4]?></td>
-									<td><?=$value[$i][5]?></td>
-									<td><?=$value[$i][6]?></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
 								</tr>
-								<?php }} ?>
 							</tbody>
 						</table>
-						<?php }}?>
-						<?php $score_all = array_reverse($score_all);  foreach($score_all as $key => $value){ if(is_array($value)){ ?>
 						<hr>
-						<label><?=$key?></label>
+						<label></label>
 						<table class="table">
 							<thead>
 								<tr>
@@ -72,41 +63,46 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php for($i = 0, $len = count($value); $i < $len; $i++) { if(is_array($value[$i])){ ?>
 								<tr>
-									<td><?=$value[$i]['name']?></td>
-									<td><?=$value[$i]['score']?></td>
-									<td><?=$value[$i]['num']?></td>
-									<td><?=$value[$i]['att']?></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
 								</tr>
-								<?php }} ?>
 							</tbody>
 						</table>
-						<table class="table">
-							<thead>
-								<tr>
-									<th>课程名称（阶段成绩）</th>
-									<th>阶1</th>
-									<th>阶2</th>
-									<th>阶3</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php for($i = 0, $len = count($score_item[$key]); $i < $len; $i++) { if(is_array($score_item[$key][$i])){ ?>
-								<tr>
-									<td><?=$score_item[$key][$i][2]?></td>
-									<td><?=$score_item[$key][$i][4]?></td>
-									<td><?=$score_item[$key][$i][5]?></td>
-									<td><?=$score_item[$key][$i][6]?></td>
-								</tr>
-								<?php }} ?>
-							</tbody>
-						</table>
-						<?php }}?>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script>
+		$(function(){
+			$.ajax({
+				'url': '/api/v1/score',
+				'method': 'get',
+				'success': function(result) {
+					switch (result.code) {
+						case 302:
+							$('html').html(result.message);
+							window.location.assign(result.data);
+							return false;
+						case 403:
+							window.location.assign('/sign');
+							return false;
+						case 500:
+							//no break;
+						default:
+							alert(result.message + "\n错误代码：" + result.code);
+							return false;
+					}
+					
+				},
+				'error': function(err) {
+					console.log(err);
+				}
+			});
+		});
+	</script>
 </body>
 </html>
