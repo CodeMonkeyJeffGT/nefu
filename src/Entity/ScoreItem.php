@@ -36,6 +36,11 @@ class ScoreItem
      */
     private $type;
 
+    /**
+     * @ORM\Column(type="string", length=15)
+     */
+    private $term;
+
     public function getId()
     {
         return $this->id;
@@ -85,6 +90,18 @@ class ScoreItem
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getTerm(): ?string
+    {
+        return $this->term;
+    }
+
+    public function setTerm(string $term): self
+    {
+        $this->term = $term;
 
         return $this;
     }
