@@ -19,7 +19,7 @@
 			<div class="col-md-12 column">
 				<div class="row clearfix" id="platform">
 					<div class="col-md-3 column">
-						<div class="jumbotron" style="background-color: rgba(235, 250, 237, 0.322); margin-bottom: 0px; padding: 15px">
+						<div class="jumbotron" style="background-color: rgb(241, 250, 242); margin-bottom: 0px; padding: 15px">
 							<table id='avg' style="width: 250px;">
 								<tr><th>学期加权</th><th>含公选</th><th>不含公选</th></tr>
 							</table>
@@ -102,14 +102,14 @@
 					for (key in term) {
 						scoreStrTmp = '<hr><label>' + key + '</label><table class="table">';
 						if (term[key].all != null) {
-							scoreStrTmp += '<thead><tr><th>课程名称（总成绩）</th><th style="width:60px; text-align:center">成绩</th><th style="width:60px; text-align:center">学分</th></tr></thead><tbody>';
+							scoreStrTmp += '<thead><tr style="background-color: rgb(250, 250, 250)"><th>课程名称（总成绩）</th><th style="width:60px; text-align:center">成绩</th><th style="width:60px; text-align:center">学分</th></tr></thead><tbody>';
 							for (scoreKey in term[key].all) {
 								scoreStrTmp += '<tr><td>' + term[key].all[scoreKey].name + '</td><td style="text-align:center">' + term[key].all[scoreKey].score + '</td><td style="text-align:center">' + term[key].all[scoreKey].num + '</td></tr>';
 							}
 							scoreStrTmp += '</tbody>';
 						}
 						if (term[key].item != null) {
-							scoreStrTmp += '<thead><tr><th>课程名称（阶段成绩）</th><th style="width:60px; text-align:center">成绩</th><th style="width:60px; text-align:center">类型</th></tr></thead><tbody>';
+							scoreStrTmp += '<thead><tr style="background-color: rgb(250, 250, 250)"><th>课程名称（阶段成绩）</th><th style="width:60px; text-align:center">成绩</th><th style="width:60px; text-align:center">类型</th></tr></thead><tbody>';
 							for (scoreKey in term[key].item) {
 								switch(term[key].item[scoreKey].type) {
 									case 'itm1':
