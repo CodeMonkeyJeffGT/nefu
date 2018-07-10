@@ -19,10 +19,28 @@ class ScoreItemRepository extends ServiceEntityRepository
         parent::__construct($registry, ScoreItem::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $scoreItems = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $scoreItem = new ScoreItem();
+            $scoreItems[] = $scoreItem;
+            $scoreItem->setAccount($data[$i]['account']);
+            $scoreItem->setLessonId($data[$i]['lessonId']);
+            $scoreItem->setScore($data[$i]['score']);
+            $scoreItem->setTerm($data[$i]['term']);
+            $scoreItem->setType($data[$i]['type']);
+            $entityManager->persist($scoreItem);
+        }
+        $entityManager->flush();
+        return $scoreItems;
+    }
+
     public function listScores($account)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT `score` `score`, `l`.`name` `lesson`, `s`.`term` `term`, `s`.`type` `type`
+        $sql = 'SELECT `s`.`id` `id`, `score` `score`, `l`.`code` `code`, `l`.`name` `name`, `s`.`term` `term`, `s`.`type` `type`, `s`.`lesson_id` `lesson_id`
             FROM `score_item` `s`
             LEFT JOIN `lesson` `l`
             ON `l`.`id` = `s`.`lesson_id`

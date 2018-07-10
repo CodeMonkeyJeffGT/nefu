@@ -19,6 +19,22 @@ class LessonRepository extends ServiceEntityRepository
         parent::__construct($registry, Lesson::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $lessons = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $lesson = new Lesson();
+            $lessons[] = $lesson;
+            $lesson->setCode($data[$i]['code']);
+            $lesson->setName($data[$i]['name']);
+            $lesson->setNum($data[$i]['num']);
+            $entityManager->persist($lesson);
+        }
+        $entityManager->flush();
+        return $lessons;
+    }
+
 //    /**
 //     * @return Lesson[] Returns an array of Lesson objects
 //     */

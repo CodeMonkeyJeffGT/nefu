@@ -19,6 +19,22 @@ class PermissionRepository extends ServiceEntityRepository
         parent::__construct($registry, Permission::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $permisisions = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $permisision = new Permisision();
+            $permisisions[] = $permisision;
+            $permisision->setName($data[$i]['name']);
+            $permisision->setAccount($data[$i]['account']);
+            $permisision->setPermit($data[$i]['permit']);
+            $entityManager->persist($permisision);
+        }
+        $entityManager->flush();
+        return $permisisions;
+    }
+
 //    /**
 //     * @return Permission[] Returns an array of Permission objects
 //     */

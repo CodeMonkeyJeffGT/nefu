@@ -88,7 +88,8 @@
 					} else {
 						history.go(-1);
 					}
-					window.location.reload();
+					window.opener.location.href = window.opener.document.referrer;
+					window.close();
 					return false;
 				}
 			});

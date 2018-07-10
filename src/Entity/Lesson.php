@@ -26,6 +26,11 @@ class Lesson
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $num;
+
     public function getId()
     {
         return $this->id;
@@ -51,6 +56,18 @@ class Lesson
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getNum(): ?float
+    {
+        return $this->num;
+    }
+
+    public function setNum(float $num): self
+    {
+        $this->num = $num;
 
         return $this;
     }

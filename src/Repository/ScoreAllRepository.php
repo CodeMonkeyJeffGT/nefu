@@ -19,10 +19,27 @@ class ScoreAllRepository extends ServiceEntityRepository
         parent::__construct($registry, ScoreAll::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $scoreAlls = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $scoreAll = new ScoreAll();
+            $scoreAlls[] = $scoreAll;
+            $scoreAll->setAccount($data[$i]['account']);
+            $scoreAll->setLessonId($data[$i]['lessonId']);
+            $scoreAll->setScore($data[$i]['score']);
+            $scoreAll->setTerm($data[$i]['term']);
+            $entityManager->persist($scoreAll);
+        }
+        $entityManager->flush();
+        return $scoreAlls;
+    }
+
     public function listScores($account)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT `score` `score`, `l`.`name` `lesson`, `s`.`term` `term`
+        $sql = 'SELECT `s`.`id` `id`, `score` `score`, `l`.`code` `code`, `l`.`name` `name`, `s`.`term` `term`, `s`.`lesson_id` `lesson_id`
             FROM `score_all` `s`
             LEFT JOIN `lesson` `l`
             ON `l`.`id` = `s`.`lesson_id`

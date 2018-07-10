@@ -19,6 +19,22 @@ class MajorRepository extends ServiceEntityRepository
         parent::__construct($registry, Major::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $majors = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $major = new Major();
+            $majors[] = $major;
+            $major->setName($data[$i]['name']);
+            $major->setCollegeId($data[$i]['collegeId']);
+            $entityManager->persist($major);
+        }
+        $entityManager->flush();
+        return $majors;
+    }
+
+
 //    /**
 //     * @return Major[] Returns an array of Major objects
 //     */

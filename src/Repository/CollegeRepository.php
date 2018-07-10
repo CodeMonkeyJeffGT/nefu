@@ -19,6 +19,20 @@ class CollegeRepository extends ServiceEntityRepository
         parent::__construct($registry, College::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $colleges = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $college = new College();
+            $colleges[] = $college;
+            $college->setName($data[$i]['name']);
+            $entityManager->persist($college);
+        }
+        $entityManager->flush();
+        return $colleges;
+    }
+
 //    /**
 //     * @return College[] Returns an array of College objects
 //     */

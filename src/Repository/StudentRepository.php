@@ -19,6 +19,26 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
+    public function insert($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $students = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $student = new Student();
+            $students[] = $student;
+            $student->setAccount($data[$i]['account']);
+            $student->setPassword($data[$i]['password']);
+            $student->setOpenid($data[$i]['openid']);
+            $student->setCreated(new \Date('now', 'PRC'));
+            $student->setMajorId($data[$i]['majorId']);
+            $student->setGrade($data[$i]['grade']);
+            $student->setSex($data[$i]['sex']);
+            $entityManager->persist($student);
+        }
+        $entityManager->flush();
+        return $students;
+    }
+
 //    /**
 //     * @return Student[] Returns an array of Student objects
 //     */
