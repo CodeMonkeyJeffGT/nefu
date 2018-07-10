@@ -28,7 +28,6 @@ class LessonRepository extends ServiceEntityRepository
             $lessons[] = $lesson;
             $lesson->setCode($data[$i]['code']);
             $lesson->setName($data[$i]['name']);
-            $lesson->setNum($data[$i]['num']);
             $entityManager->persist($lesson);
         }
         $entityManager->flush();
@@ -47,15 +46,22 @@ class LessonRepository extends ServiceEntityRepository
         $stmt->execute(array());
         $ids = $stmt->fetchAll();
         $lessonsGot = array();
-        foreach ($ids as $value) {
-            $lessonsGot[$value['code']] = $value['id'];
-            unset($lessons[$value['code']]);
+        foreach ($ids as $lesson)  {
+            $lessonsGot[$lesson['code']] = $lesson['id'];
+            unset($lessons[$lesson['code']]);
         }
-        array_map(function($value) {
-            $lessonsGot[$value['code']] = $value['id'];
-            unset($lessons[$value['code']]);
-        }, $ids);
-        
+        $ids = array();
+        foreach ($lessons as $key => $value) {
+            $ids[] = array(
+                'code' => $key,
+                'name' => $value['name'],
+            );
+        }
+        $ids = $this->insert($ids);
+        foreach ($ids as $lesson) {
+            $lessonsGot[$lesson->getCode()] = $lesson->getId();
+        };
+        return $lessonsGot;
     }
 
 //    /**

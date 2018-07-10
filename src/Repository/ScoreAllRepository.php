@@ -30,6 +30,8 @@ class ScoreAllRepository extends ServiceEntityRepository
             $scoreAll->setLessonId($data[$i]['lessonId']);
             $scoreAll->setScore($data[$i]['score']);
             $scoreAll->setTerm($data[$i]['term']);
+            $scoreAll->setType($data[$i]['type']);
+            $scoreAll->setNum($data[$i]['num']);
             $entityManager->persist($scoreAll);
         }
         $entityManager->flush();
@@ -39,7 +41,7 @@ class ScoreAllRepository extends ServiceEntityRepository
     public function listScores($account)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT `s`.`id` `id`, `s`.`score` `score`, `s`.`term` `term`, `s`.`lesson_id` `lesson_id`, `l`.`code` `code`, `l`.`name` `name`, `l`.`num`
+        $sql = 'SELECT `s`.`id` `id`, `s`.`score` `score`, `s`.`term` `term`, `s`.`lesson_id` `lesson_id`, `s`.`type` `type`, `s`.`num`, `l`.`code` `code`, `l`.`name` `name`
             FROM `score_all` `s`
             LEFT JOIN `lesson` `l`
             ON `l`.`id` = `s`.`lesson_id`

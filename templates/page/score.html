@@ -17,61 +17,15 @@
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<div class="row clearfix">
+				<div class="row clearfix" id="platform">
 					<div class="col-md-3 column">
 						<div class="jumbotron" style="background-color: rgb(235, 255, 235); margin-bottom: 0px; padding: 15px">
-							<table style="width: 250px;">
-								<tr><th>学期</th><th>加权<br>(含公选)</th><th>加权<br>(不含公选)</th></tr>
-								<tr><td></td><td></td><td></td>
-								<tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr>
-								<tr><th>学年</th><th>加权<br>(含公选)</th><th>加权<br>(不含公选)</th></tr>
-								<tr><td></td><td></td><td></td>
+							<table id='avg' style="width: 250px;">
+								<tr><th>学期加权</th><th>含公选</th><th>不含公选</th></tr>
 							</table>
-							<br>
-							<span style="font-size:16px">总加权：<big></big></span>
 						</div>
 					</div>
-					<div class="col-md-9 column">
-						<hr>
-						<label></label>
-						<table class="table">
-							<thead>
-								<tr>
-									<th>课程名称（阶段成绩）</th>
-									<th>阶1</th>
-									<th>阶2</th>
-									<th>阶3</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
-						<hr>
-						<label></label>
-						<table class="table">
-							<thead>
-								<tr>
-									<th>课程名称（总成绩）</th>
-									<th>成绩</th>
-									<th>学分</th>
-									<th>属性</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
+					<div id="score" class="col-md-9 column">
 					</div>
 				</div>
 			</div>
@@ -79,6 +33,7 @@
 	</div>
 	<script>
 		$(function(){
+			$("#platform").css('visibility', 'hidden');
 			$.ajax({
 				'url': '/api/v1/score',
 				'method': 'get',
@@ -98,6 +53,64 @@
 							alert(result.message + "\n错误代码：" + result.code);
 							return false;
 					}
+					result = result.data;
+					term = result.avg.term;
+					year = result.avg.year;
+					var tmpStr = '';
+					for (key in term) {
+						tmpStr = tmpStr + '<tr><td>' + key + '</td><td>' + term[key].t + '</td><td>' + term[key].f + '</td></tr>';
+					}
+					$('#avg').append(tmpStr);
+					$('#avg').append('<tr><th>学年加权</th><th>含公选</th><th>不含公选</th></tr>');
+					for (key in year) {
+						$('#avg').append('<tr><td>' + key + '</td><td>' + year[key].t + '</td><td>' + year[key].f + '</td></tr>');
+					}
+					$('#avg').append('<tr><th rowspan="2">总加权</th><th>含公选</th><th>不含公选</th></tr>');
+					$('#avg').append('<tr><td>' + result.avg.all.t + '</td><td>' + result.avg.all.f + '</td></tr>');
+					term = result.term;
+					var scoreStr = '';
+					for (key in term) {
+						scoreStrTmp = '<hr><label>' + key + '</label><table class="table">';
+						if (term[key].all != null) {
+							scoreStrTmp += '<thead><tr><th>课程名称（总成绩）</th><th style="width:60px; text-align:center">成绩</th><th style="width:60px; text-align:center">学分</th></tr></thead><tbody>';
+							for (scoreKey in term[key].all) {
+								scoreStrTmp += '<tr><td>' + term[key].all[scoreKey].name + '</td><td style="text-align:center">' + term[key].all[scoreKey].score + '</td><td style="text-align:center">' + term[key].all[scoreKey].num + '</td></tr>';
+							}
+							scoreStrTmp += '</tbody>';
+						}
+						if (term[key].item != null) {
+							scoreStrTmp += '<thead><tr><th>课程名称（阶段成绩）</th><th style="width:60px; text-align:center">成绩</th><th style="width:60px; text-align:center">类型</th></tr></thead><tbody>';
+							for (scoreKey in term[key].item) {
+								switch(term[key].item[scoreKey].type) {
+									case 'itm1':
+										term[key].item[scoreKey].type = '阶段1';
+										break;
+									case 'itm2':
+										term[key].item[scoreKey].type = '阶段2';
+										break;
+									case 'itm3':
+										term[key].item[scoreKey].type = '阶段3';
+										break;
+									case 'fin':
+										term[key].item[scoreKey].type = '期末';
+										break;
+									case 'mid':
+										term[key].item[scoreKey].type = '期中';
+										break;
+									case 'nml':
+										term[key].item[scoreKey].type = '平时';
+										break;
+								}
+								scoreStrTmp += '<tr><td>' + term[key].item[scoreKey].name + '</td><td style="text-align:center">' + term[key].item[scoreKey].score + '</td><td style="text-align:center">' + term[key].item[scoreKey].type + '</td></tr>';
+							}
+							scoreStrTmp += '</tbody>';
+						}
+						scoreStrTmp += '</tbody></table>';
+						scoreStr = scoreStrTmp + scoreStr;
+					}
+					$("#score").append(scoreStr);
+
+					$("#platform").css('visibility', 'visible');
 				},
 				'error': function(err) {
 					console.log(err);

@@ -36,6 +36,16 @@ class ScoreAll
      */
     private $term;
 
+    /**
+     * @ORM\Column(type="string", length=15)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $num;
+
     public function getId()
     {
         return $this->id;
@@ -85,6 +95,30 @@ class ScoreAll
     public function setTerm(string $term): self
     {
         $this->term = $term;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getNum(): ?float
+    {
+        return $this->num;
+    }
+
+    public function setNum(float $num): self
+    {
+        $this->num = $num;
 
         return $this;
     }
