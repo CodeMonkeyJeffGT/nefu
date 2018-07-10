@@ -19,7 +19,7 @@
 			<div class="col-md-12 column">
 				<div class="row clearfix" id="platform">
 					<div class="col-md-3 column">
-						<div class="jumbotron" style="background-color: rgb(235, 255, 235); margin-bottom: 0px; padding: 15px">
+						<div class="jumbotron" style="background-color: rgba(235, 250, 237, 0.322); margin-bottom: 0px; padding: 15px">
 							<table id='avg' style="width: 250px;">
 								<tr><th>学期加权</th><th>含公选</th><th>不含公选</th></tr>
 							</table>
@@ -54,6 +54,36 @@
 							return false;
 					}
 					result = result.data;
+					var update = "新成绩：\n";
+					for (i in result.update.all) {
+						update += result.update.all[i].name + "（" + result.update.all[i].num + "学分）:" + result.update.all[i].score + "\n";
+					}
+					for (i in result.update.item) {
+						switch(result.update.item[i].type) {
+							case 'itm1':
+								result.update.item[i].type = '阶段1';
+								break;
+							case 'itm2':
+								result.update.item[i].type = '阶段2';
+								break;
+							case 'itm3':
+								result.update.item[i].type = '阶段3';
+								break;
+							case 'fin':
+								result.update.item[i].type = '期末';
+								break;
+							case 'mid':
+								result.update.item[i].type = '期中';
+								break;
+							case 'nml':
+								result.update.item[i].type = '平时';
+								break;
+						}
+						update += result.update.all[i].name + "（" + result.update.all[i].type + "）:" + result.update.all[i].score + "\n";
+					}
+					if (update != "新成绩：\n") {
+						alert(update);
+					}
 					term = result.avg.term;
 					year = result.avg.year;
 					var tmpStr = '';
@@ -113,7 +143,7 @@
 					$("#platform").css('visibility', 'visible');
 				},
 				'error': function(err) {
-					console.log(err);
+					alert('出错了，刷新试试？');
 				}
 			});
 		});

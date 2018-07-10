@@ -26,11 +26,11 @@ class ScoreController extends Controller
             $scoreAll = $nefuer->scoreAll();
             $scoreItem = $nefuer->scoreItem();
         } catch (\Exception $e) {
-            $scoreAll = array();
+            $scoreAll = array('score' => array());
             $scoreItem = array();
         }
         if (isset($scoreAll['code'])) {
-            $scoreAll = array();
+            $scoreAll = array('score' => array());
         }
         if (isset($scoreItem['code'])) {
             $scoreItem = array();
@@ -273,8 +273,8 @@ class ScoreController extends Controller
                     'scoreF' => 0,
                     'numF' => 0,
                 );
-                if ( ! isset($yearAvg[substr($score['term'], 0, 4)])) {
-                    $yearAvg[substr($score['term'], 0, 4)] = array(
+                if ( ! isset($yearAvg[substr($score['term'], 0, 9)])) {
+                    $yearAvg[substr($score['term'], 0, 9)] = array(
                         'scoreT' => 0,
                         'numT' => 0,
                         'scoreF' => 0,
@@ -293,10 +293,10 @@ class ScoreController extends Controller
                     $termAvg[$score['term']]['numT'] += $score['num'];
                     $termAvg[$score['term']]['scoreF'] += $score['score'] * $score['num'];
                     $termAvg[$score['term']]['numF'] += $score['num'];
-                    $yearAvg[substr($score['term'], 0, 4)]['scoreT'] += $score['score'] * $score['num'];
-                    $yearAvg[substr($score['term'], 0, 4)]['numT'] += $score['num'];
-                    $yearAvg[substr($score['term'], 0, 4)]['scoreF'] += $score['score'] * $score['num'];
-                    $yearAvg[substr($score['term'], 0, 4)]['numF'] += $score['num'];
+                    $yearAvg[substr($score['term'], 0, 9)]['scoreT'] += $score['score'] * $score['num'];
+                    $yearAvg[substr($score['term'], 0, 9)]['numT'] += $score['num'];
+                    $yearAvg[substr($score['term'], 0, 9)]['scoreF'] += $score['score'] * $score['num'];
+                    $yearAvg[substr($score['term'], 0, 9)]['numF'] += $score['num'];
                     $allAvg['scoreT'] += $score['score'] * $score['num'];
                     $allAvg['numT'] += $score['num'];
                     $allAvg['scoreF'] += $score['score'] * $score['num'];
@@ -304,8 +304,8 @@ class ScoreController extends Controller
                 } else {
                     $termAvg[$score['term']]['scoreT'] += $score['score'] * $score['num'];
                     $termAvg[$score['term']]['numT'] += $score['num'];
-                    $yearAvg[substr($score['term'], 0, 4)]['scoreT'] += $score['score'] * $score['num'];
-                    $yearAvg[substr($score['term'], 0, 4)]['numT'] += $score['num'];
+                    $yearAvg[substr($score['term'], 0, 9)]['scoreT'] += $score['score'] * $score['num'];
+                    $yearAvg[substr($score['term'], 0, 9)]['numT'] += $score['num'];
                     $allAvg['scoreT'] += $score['score'] * $score['num'];
                     $allAvg['numT'] += $score['num'];
                 }
