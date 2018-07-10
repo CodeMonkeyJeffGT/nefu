@@ -45,6 +45,7 @@ class ScoreItemRepository extends ServiceEntityRepository
             LEFT JOIN `lesson` `l`
             ON `l`.`id` = `s`.`lesson_id`
             WHERE `account` = :account
+            ORDER BY `code`
         ';
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(

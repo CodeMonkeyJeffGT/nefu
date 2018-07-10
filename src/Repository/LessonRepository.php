@@ -35,6 +35,29 @@ class LessonRepository extends ServiceEntityRepository
         return $lessons;
     }
 
+    public function getIds($lessons): array
+    {
+        $codes = array_keys($lessons);
+        $sql = 'SELECT `l`.`id`, `l`.`code`
+            FROM `lesson` `l`
+            WHERE `l`.`code` IN ("' . implode('", "', $codes) .  '")
+        ';
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array());
+        $ids = $stmt->fetchAll();
+        $lessonsGot = array();
+        foreach ($ids as $value) {
+            $lessonsGot[$value['code']] = $value['id'];
+            unset($lessons[$value['code']]);
+        }
+        array_map(function($value) {
+            $lessonsGot[$value['code']] = $value['id'];
+            unset($lessons[$value['code']]);
+        }, $ids);
+        
+    }
+
 //    /**
 //     * @return Lesson[] Returns an array of Lesson objects
 //     */

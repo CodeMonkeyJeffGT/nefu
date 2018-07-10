@@ -39,7 +39,7 @@ class ScoreAllRepository extends ServiceEntityRepository
     public function listScores($account)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT `s`.`id` `id`, `score` `score`, `l`.`code` `code`, `l`.`name` `name`, `s`.`term` `term`, `s`.`lesson_id` `lesson_id`
+        $sql = 'SELECT `s`.`id` `id`, `s`.`score` `score`, `s`.`term` `term`, `s`.`lesson_id` `lesson_id`, `l`.`code` `code`, `l`.`name` `name`, `l`.`num`
             FROM `score_all` `s`
             LEFT JOIN `lesson` `l`
             ON `l`.`id` = `s`.`lesson_id`
