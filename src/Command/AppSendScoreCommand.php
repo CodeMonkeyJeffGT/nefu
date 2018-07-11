@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Service\RedisService;
 use App\Service\ScoreSortService;
 use App\Service\WechatService;
 
@@ -15,14 +16,19 @@ use App\Service\WechatService;
 class AppSendScoreCommand extends Command
 {
     protected static $defaultName = 'app:send-score';
+    private $redisService;
+    private $scoreService;
+    private $wechatService;
+
+    public function __construct(RedisService $redisService, ScoreSortService $scoreService, WechatService $wechatService)
+    {
+        $this->redisService = $redisService;
+        $this->scoreService = $scoreService;
+        $this->wechatService = $wechatService;
+    }
 
     protected function configure()
     {
-        // $this
-        //     ->setDescription('Add a short description for your command')
-        //     ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-        //     ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        // ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
