@@ -10,8 +10,9 @@ class WechatService
 {
     private $wechat;
 
-    public function __construct(Request $request, RedisService $redis)
+    public function __construct(RedisService $redis)
     {
+        $request = Request::createFromGlobals();
         $appid = $request->server->get('WX_APPID');
         $secret = $request->server->get('WX_SECRET');
         $access_token = $redis->getOrNew('wechat_access_token', function() use($appid, $secret) {
