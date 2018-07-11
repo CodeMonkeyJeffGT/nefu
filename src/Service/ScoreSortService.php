@@ -117,6 +117,7 @@ class ScoreSortService
                         'name' => $oldAll[$key]['name'],
                         'score' => $oldAll[$key]['score'],
                         'num' => $oldAll[$key]['num'],
+                        'update' => true,
                     );
                 }
             } else {
@@ -137,6 +138,7 @@ class ScoreSortService
                     'name' => $score['name'],
                     'score' => $score['score'],
                     'num' => $score['num'],
+                    'update' => false,
                 );
                 $oldAll = array_merge(array(
                     array(
@@ -156,6 +158,7 @@ class ScoreSortService
             $key = $this->existScoreItem($score, $oldItem);
             if ($key !== false) {
                 if ($score['score'] != $oldItem[$key]['score']) {
+                    $oldItem[$key]['score'] = $score['score'];
                     $updateItem[] = array(
                         'id' => $oldItem[$key]['id'],
                         'score' => $oldItem[$key]['score'],
@@ -164,6 +167,8 @@ class ScoreSortService
                         'name' => $oldItem[$key]['name'],
                         'score' => $oldItem[$key]['score'],
                         'type' => $oldItem[$key]['type'],
+                        'num' => $score['num'],
+                        'update' => true,
                     );
                 }
             } else {
@@ -184,6 +189,8 @@ class ScoreSortService
                     'name' => $score['name'],
                     'score' => $score['score'],
                     'type' => $score['type'],
+                    'num' => $score['num'],
+                    'update' => false,
                 );
                 $oldItem = array_merge(array(
                     array(

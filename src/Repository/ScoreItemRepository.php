@@ -37,6 +37,20 @@ class ScoreItemRepository extends ServiceEntityRepository
         return $scoreItems;
     }
 
+    public function update($data): array
+    {
+        $entityManager = $this->getEntityManager();
+        $scoreItems = array();
+        for ($i = 0, $len = count($data); $i < $len; $i++) {
+            $scoreItem = $this->find($data[$i]['id']);
+            $scoreItems[] = $scoreItem;
+            $scoreItem->setScore($data[$i]['score']);
+            $entityManager->persist($scoreItem);
+        }
+        $entityManager->flush();
+        return $scoreItems;
+    }
+
     public function listScores($account)
     {
         $conn = $this->getEntityManager()->getConnection();
