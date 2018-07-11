@@ -22,6 +22,7 @@ class AppSendScoreCommand extends Command
 
     public function __construct(RedisService $redisService, ScoreSortService $scoreService, WechatService $wechatService)
     {
+        parent::__construct();
         $this->redisService = $redisService;
         $this->scoreService = $scoreService;
         $this->wechatService = $wechatService;
