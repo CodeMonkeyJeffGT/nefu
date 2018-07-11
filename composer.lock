@@ -1077,16 +1077,16 @@
         },
         {
             "name": "gutian/wechat",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodeMonkeyJeffGT/wechat.git",
-                "reference": "8c6eeaa0b2e4148a7dd994f36279c1cd52626a3e"
+                "reference": "0bdd35eeb7e637d17fa5f2ec74f05eeb0ccc6f26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/wechat/zipball/8c6eeaa0b2e4148a7dd994f36279c1cd52626a3e",
-                "reference": "8c6eeaa0b2e4148a7dd994f36279c1cd52626a3e",
+                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/wechat/zipball/0bdd35eeb7e637d17fa5f2ec74f05eeb0ccc6f26",
+                "reference": "0bdd35eeb7e637d17fa5f2ec74f05eeb0ccc6f26",
                 "shasum": ""
             },
             "require": {
@@ -1109,7 +1109,7 @@
                 }
             ],
             "description": "微信类",
-            "time": "2018-07-11T00:57:17+00:00"
+            "time": "2018-07-11T09:39:20+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
