@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use App\Controller\BaseController as Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Nefu\Nefuer;
-use Wechat\Wechat;
+use App\Entity\Student;
+use App\Entity\College;
+use App\Entity\Major;
+use App\Service\WechatService;
 
 class UserController extends Controller
 {
@@ -41,11 +42,11 @@ class UserController extends Controller
     /**
      * 3、微信登录
      */
-    public function wxIn(): JsonResponse
+    public function wxIn(WechatService $wechatService): JsonResponse
     {
         $appid = $this->request->server->get('WX_APPID');
         $secret = $this->request->server->get('WX_SECRET');
-        $wechat = new Wechat($appid, $secret, false);
+        $wechat = $wechatService->getWechat();
         if ( ! $this->request->request->has('code')) {
             //4、获取openid
             $redirectUri = $this->generateUrl(
@@ -108,11 +109,6 @@ class UserController extends Controller
         $login = $nefuer->login($account, $password);
         
         switch($login['code']) {
-            case 0:
-                $this->session->set('nefuer_account', $account);
-                $this->session->set('nefuer_password', $password);
-                $this->session->set('nefuer_cookie', $nefuer->getCookie());
-                return $this->success();
             case 100:
                 if ($local) {
                     return false;
@@ -122,6 +118,58 @@ class UserController extends Controller
             case 201:
                 return $this->error(null, '账号或密码错误');
         }
-        return $this->success($login);
+        
+        $studentDb = $this->getDoctrine()->getRepository(Student::class);
+        $manager = $this->getDoctrine()->getEntityManager();
+        $student = $studentDb->createQueryBuilder('s')
+            ->andWhere('s.account = :account')
+            ->setParameter('account', $account)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+        $openid = $this->session->get('nefuer_openid', '');
+        if (is_null($student)) {
+            $student = $nefuer->info();
+            if ( ! isset($student['code'])) {
+                $collegeDb = $this->getDoctrine()->getRepository(College::class);
+                $majorDb = $this->getDoctrine()->getRepository(Major::class);
+                $collegeId = $collegeDb->getId($student['college']);
+                $majorId = $majorDb->getId($student['major'], $collegeId);
+                switch ($student['sex']) {
+                    case '男':
+                        $student['sex'] = 1;
+                        break;
+                    case '女':
+                        $student['sex'] = 2;
+                        break;
+                    default:
+                        $student['sex'] = 0;
+                        break;
+                }
+                $student = array(
+                    'account' => $account,
+                    'password' => $password,
+                    'openid' => $openid,
+                    'majorId' => $majorId,
+                    'sex' => $student['sex'],
+                    'grade' => (int)substr($account, 0, 4),
+                );
+                $studentDb->insert(array($student));
+            }
+        } elseif ($openid != '' && $student->getOpenid() != $openid) {
+            $student->setOpenid($openid);
+            $student->setPassword($password);
+            $manager->persist($student);
+            $manager->flush();
+        } elseif ($password != $student->getPassword()) {
+            $student->setPassword($password);
+            $manager->persist($student);
+            $manager->flush();
+        }
+
+        $this->session->set('nefuer_account', $account);
+        $this->session->set('nefuer_password', $password);
+        $this->session->set('nefuer_cookie', $nefuer->getCookie());
+        return $this->success();
     }
 }

@@ -34,6 +34,25 @@ class MajorRepository extends ServiceEntityRepository
         return $majors;
     }
 
+    public function getId($name, $collegeId): int
+    {
+        $major = $this->createQueryBuilder('m')
+            ->andWhere('m.name = :name')
+            ->andWhere('m.college_id = :collegeId')
+            ->setParameter('name', $name)
+            ->setParameter('collegeId', $collegeId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+        if (is_null($major)) {
+            $major = $this->insert(array(array(
+                'name' => $name,
+                'collegeId' => $collegeId,
+            )))[0];
+        }
+        return $major->getId();
+    }
+
 
 //    /**
 //     * @return Major[] Returns an array of Major objects

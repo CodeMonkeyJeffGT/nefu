@@ -33,6 +33,22 @@ class CollegeRepository extends ServiceEntityRepository
         return $colleges;
     }
 
+    public function getId($name): int
+    {
+        $college = $this->createQueryBuilder('c')
+            ->andWhere('c.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+        if (is_null($college)) {
+            $college = $this->insert(array(array(
+                'name' => $name,
+            )))[0];
+        }
+        return $college->getId();
+    }
+
 //    /**
 //     * @return College[] Returns an array of College objects
 //     */

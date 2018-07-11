@@ -1041,16 +1041,16 @@
         },
         {
             "name": "gutian/nefu",
-            "version": "1.0.3",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodeMonkeyJeffGT/nefuer.git",
-                "reference": "b66a17727e67386a8a9ea80c52b58e499764bfe8"
+                "reference": "33f315378a5d7b05e390acec73b209b093147d79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/nefuer/zipball/b66a17727e67386a8a9ea80c52b58e499764bfe8",
-                "reference": "b66a17727e67386a8a9ea80c52b58e499764bfe8",
+                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/nefuer/zipball/33f315378a5d7b05e390acec73b209b093147d79",
+                "reference": "33f315378a5d7b05e390acec73b209b093147d79",
                 "shasum": ""
             },
             "require": {
@@ -1073,20 +1073,20 @@
                 }
             ],
             "description": "教务系统爬虫库",
-            "time": "2018-07-09T09:56:06+00:00"
+            "time": "2018-07-11T02:49:19+00:00"
         },
         {
             "name": "gutian/wechat",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodeMonkeyJeffGT/wechat.git",
-                "reference": "57af7492e1760ffacc41179b590b09888566591a"
+                "reference": "8c6eeaa0b2e4148a7dd994f36279c1cd52626a3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/wechat/zipball/57af7492e1760ffacc41179b590b09888566591a",
-                "reference": "57af7492e1760ffacc41179b590b09888566591a",
+                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/wechat/zipball/8c6eeaa0b2e4148a7dd994f36279c1cd52626a3e",
+                "reference": "8c6eeaa0b2e4148a7dd994f36279c1cd52626a3e",
                 "shasum": ""
             },
             "require": {
@@ -1109,7 +1109,7 @@
                 }
             ],
             "description": "微信类",
-            "time": "2018-07-09T03:09:48+00:00"
+            "time": "2018-07-11T00:57:17+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

@@ -29,10 +29,11 @@ class StudentRepository extends ServiceEntityRepository
             $student->setAccount($data[$i]['account']);
             $student->setPassword($data[$i]['password']);
             $student->setOpenid($data[$i]['openid']);
-            $student->setCreated(new \Date('now', 'PRC'));
+            $student->setCreated(new \DateTime('now', new \DateTimeZone('PRC')));
             $student->setMajorId($data[$i]['majorId']);
             $student->setGrade($data[$i]['grade']);
             $student->setSex($data[$i]['sex']);
+            $student->setNickname($data[$i]['account']);
             $entityManager->persist($student);
         }
         $entityManager->flush();

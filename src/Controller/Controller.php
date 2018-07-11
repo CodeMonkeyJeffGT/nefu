@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +16,7 @@ use Nefu\Nefuer;
  * @method JsonResponse toUrl(string $message = null, $data = null, $code = null)
  * @method JsonResponse return($data = null, string $message = null, $code = null)
  */
-abstract class BaseController extends Controller
+abstract class Controller extends BaseController
 {
     protected $request;
     protected $session;
