@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Wechat\Wechat;
 use App\Service\RedisService;
 
@@ -9,10 +10,10 @@ class WechatService
 {
     private $wechat;
 
-    public function __construct(RedisService $redis)
+    public function __construct(Request $request, RedisService $redis)
     {
-        $appid = $this->request->server->get('WX_APPID');
-        $secret = $this->request->server->get('WX_SECRET');
+        $appid = $request->server->get('WX_APPID');
+        $secret = $request->server->get('WX_SECRET');
         $access_token = $redis->getOrNew('wechat_access_token', function() use($appid, $secret) {
             $wechat = new Wechat($appid, $secret);
             return $wechat->token();
