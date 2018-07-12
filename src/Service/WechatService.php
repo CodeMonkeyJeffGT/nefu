@@ -19,7 +19,7 @@ class WechatService
             $wechat = new Wechat($appid, $secret);
             return $wechat->token();
         }, 3600);
-        $this->wechat = new Wechat($appid, $secret, false);
+        $this->wechat = new Wechat($appid, $secret, $access_token);
     }
 
     public function getWechat()

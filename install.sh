@@ -33,7 +33,7 @@ function existOrNewCron()
 }
 
 existOrNewCron "00 *    * * *   root    php "`pwd`"/bin/console app:list-pushes" "00 \*    \* \* \*   root    php "`pwd`"/bin/console app:list-pushes"
-existOrNewCron "00 *    * * *   root    php "`pwd`"/bin/console app:send-score" "00 \*    \* \* \*   root    php "`pwd`"/bin/console app:send-score"
+existOrNewCron "01 *    * * *   root    php "`pwd`"/bin/console app:send-score" "01 \*    \* \* \*   root    php "`pwd`"/bin/console app:send-score"
 
 crontab /etc/crontab
 
