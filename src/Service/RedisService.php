@@ -43,14 +43,17 @@ class RedisService
         return $value;
     }
 
-    public function push($name, $value)
+    public function push($name, $value, $max = false)
     {
         if (is_array($value)) {
             foreach ($value as $val) {
                 $this->push($name, $val);
             }
         }
-        $this->redis->rpush($name, $value);
+        if ($max === false || $this->redis->lsize($name) <= $max)
+        {
+            $this->redis->rpush($name, $value);
+        }
     }
 
     public function size($name)

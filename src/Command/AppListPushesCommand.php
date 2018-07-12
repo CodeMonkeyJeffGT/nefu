@@ -38,7 +38,7 @@ class AppListPushesCommand extends Command
                         'account' => $item['account'],
                         'openid' => $item['openid'],
                         'item' => $this->checkItem($item['account'], $list),
-                    )));
+                    )), 50000);
                     break;
                 case '阶段成绩':
                     //nothing
@@ -48,7 +48,7 @@ class AppListPushesCommand extends Command
                     // $this->redisService->push('exam', json_encode(array(
                     //     'account' => $item['account'],
                     //     'openid' => $item['openid'],
-                    // )));
+                    // )), 50000);
                     break;
             }
         }
