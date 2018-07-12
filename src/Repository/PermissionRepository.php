@@ -52,6 +52,36 @@ class PermissionRepository extends ServiceEntityRepository
         return $stmt->fetchAll();
     }
 
+    public function listPermits($account): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT `p`.`name` `name`, `p`.`permit`
+            FROM `permission` `p`
+            WHERE `p`.`account` = :account
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'account' => $account,
+        ));
+        return $stmt->fetchAll();
+    }
+
+    public function switchPermit($account, $name, $permit)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'UPDATE `permission` `p`
+            SET `permit` = :permit
+            WHERE `p`.`account` = :account
+            AND `p`.`name` = :name
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'account' => $account,
+            'name' => $name,
+            'permit' => (int)$permit,
+        ));
+    }
+
 //    /**
 //     * @return Permission[] Returns an array of Permission objects
 //     */

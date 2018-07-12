@@ -34,4 +34,9 @@ class PageController extends Controller
     {
         return $this->render('page/auto.html');
     }
+
+    public function permit(): Response
+    {
+        return $this->render('page/permit.html');
+    }
 }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>知派</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="/lib/bootstrap-switch.css">
+
+	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row clearfix" style="margin-top: 100px;">
+					<div class="col-md-3 column">
+					</div>
+					<div class="col-md-6 column">
+						<form class="form-horizontal" onsubmit="return false;" role="form">
+                            <table style="width: 100%;">
+                                <tr><td style="text-align: center">成绩推送</td><td style="text-align: right"><input type="checkbox" name="score-switch"></td></tr>
+                                <tr style="height: 10px;"></tr>
+                                <tr><td style="text-align: center">阶段成绩</td><td style="text-align: right"><input type="checkbox" name="item-switch"></td></tr>
+                            </table>
+						</form>
+					</div>
+					<div class="col-md-3 column">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="error">
+		
+	</div>
+	<script type="text/javascript" src="/lib/jquery.md5.js"></script> 
+	<script type="text/javascript" src="/lib/bootstrap-switch.js"></script> 
+    <script type="text/javascript">
+        var user = false;
+        $("[name='score-switch']").bootstrapSwitch({
+            onText:"推送",
+            offText:"关闭",
+            onColor:"success",
+            offColor:"warning",
+            size:"small",
+            onSwitchChange:function(event,state){
+                if (state) {
+                    $("[name='item-switch']").bootstrapSwitch('disabled', false);
+                } else {
+                    $("[name='item-switch']").bootstrapSwitch('disabled', true);
+                }
+                switchPermit($("[name='score-switch']"), '/api/v1/permit/score', state);
+            }
+        });
+        $("[name='item-switch']").bootstrapSwitch({
+            onText:"推送",
+            offText:"关闭",
+            onColor:"success",
+            offColor:"warning",
+            size:"big",
+            onSwitchChange:function(event,state){
+                switchPermit($("[name='item-switch']"), '/api/v1/permit/item', state);
+            }
+        });
+        function switchPermit(buttonJq, url, state) {
+            if ( ! user) {
+                return;
+            }
+            console.log(state)
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: {
+                    permit: state,
+                },
+                success: function(result) {
+                    if (result.code !== 0) {
+                        alert(result.message);
+                        user = false;
+                        buttonJq.bootstrapSwitch('state', ! state);
+                        user = true;
+                    }
+                },
+                error: function(error) {
+                    alert('服务器异常，修改失败');
+                    user = false;
+                    buttonJq.bootstrapSwitch('state', ! state);
+                    user = true;
+                }
+            });
+        }
+        $(function(){
+            $("[name='score-switch']").bootstrapSwitch('state', true);
+            $("[name='item-switch']").bootstrapSwitch('state', true);
+            $.ajax({
+                url: '/api/v1/getPermit',
+                method: 'get',
+                success: function(result) {
+                    if (result.code !== 0) {
+                        alert(result.message);
+                    }
+                    result = result.data;
+                    console.log(result.成绩 == 1);
+                    console.log(result.阶段成绩 == 1);
+                    $("[name='score-switch']").bootstrapSwitch('state', result.成绩 == 1);
+                    $("[name='item-switch']").bootstrapSwitch('state', result.阶段成绩 == 1);
+                    user = true;
+                },
+                error: function(result) {
+                    alert('服务器异常');
+                },
+            });
+        })
+    </script>
+</body>
+</html>
+

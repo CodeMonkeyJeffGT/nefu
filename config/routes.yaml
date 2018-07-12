@@ -19,6 +19,15 @@ score:
 lesson:
     path: /api/v1/lesson
     controller: App\Controller\LessonController::index
+permit:
+    path: /api/v1/getPermit
+    controller: App\Controller\PermissionController::getPermit
+permit-score:
+    path: /api/v1/permit/score
+    controller: App\Controller\PermissionController::switchScore
+permit-item:
+    path: /api/v1/permit/item
+    controller: App\Controller\PermissionController::switchItem
 
 page-score:
     path: /score
@@ -38,3 +47,6 @@ page-oauth:
 page-auto:
     path: /auto
     controller: App\Controller\PageController::auto
+page-permit:
+    path: /permit
+    controller: App\Controller\PageController::permit
