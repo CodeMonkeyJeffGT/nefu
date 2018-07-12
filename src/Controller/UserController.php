@@ -65,10 +65,9 @@ class UserController extends Controller
             $openid = $info['openid'];
             $this->session->set('nefuer_openid', $openid);
             if ($this->signByOpenid($wechatService)) {
-                echo '<script>
-                window.location.assign(document.referrer);</script>';die;
+                return $this->redirectToRoute('score');
             } else {
-                return $this->render('page/sign.html');
+                return $this->redirectToRoute('sign');
             }
         }
     }
