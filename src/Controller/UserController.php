@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index(WechatService $wechatService): JsonResponse
     {
         if ($this->session->has('nefuer_openid')) {
-            return $this->signByOpenid($this->request, $this->session);
+            return ($this->signByOpenid($wechatService)) ? $this->redirectToRoute('page-score') : $this->redirectToRoute('page-sign');
         } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             return $this->wxIn($wechatService);
         } else {
@@ -104,8 +104,10 @@ class UserController extends Controller
     public function sign(WechatService $wechatService, $account = null, $password = null)
     {
         $local = ( ! is_null($account));
-        $account  = $this->request->request->get('account');
-        $password = $this->request->request->get('password');
+        if ( ! $local) {
+            $account  = $this->request->request->get('account');
+            $password = $this->request->request->get('password');
+        }
         if (empty($account)) {
             return $this->error(self::PARAM_MISS, '账号不能为空');
         }
