@@ -30,7 +30,14 @@ class AppListPushesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $list = $this->listPushesService->list();
+        foreach ($list as $push) {
+            $this->redisService->push($push->getName(), $push->getAccount());
+        }
         echo '<pre>';
-        var_dump($this->listPushesService->list());die;
+        var_dump($this->redisService->getRedis()->lrange('成绩', 0, -1));
+        var_dump($this->redisService->getRedis()->lrange('阶段成绩', 0, -1));
+        var_dump($this->redisService->getRedis()->lrange('考试', 0, -1));
+        die;
     }
 }
