@@ -65,9 +65,9 @@ class UserController extends Controller
             $openid = $info['openid'];
             $this->session->set('nefuer_openid', $openid);
             if ($this->signByOpenid($wechatService)) {
-                return $this->redirectToRoute('score');
+                return $this->redirectToRoute('page-score');
             } else {
-                return $this->redirectToRoute('sign');
+                return $this->redirectToRoute('page-sign');
             }
         }
     }
@@ -85,10 +85,10 @@ class UserController extends Controller
         //8、检查是否绑定
         if(count($user) > 0) {
             //9、绑定：登录
-            $rst = $this->sign($wechatService, $user[0]->getAccount(), $user[0]->getAccount());
+            $rst = $this->sign($wechatService, $user[0]->getAccount(), $user[0]->getPassword());
             if (false === $rst) {
-                $this->session->set('nefuer_account', $account);
-                $this->session->set('nefuer_password', $password);
+                $this->session->set('nefuer_account', $user[0]->getAccount());
+                $this->session->set('nefuer_password', $user[0]->getPassword());
             }
             return true;
         } else {
