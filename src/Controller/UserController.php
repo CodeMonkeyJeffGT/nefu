@@ -44,7 +44,7 @@ class UserController extends Controller
     /**
      * 3、微信登录
      */
-    public function wxIn(WechatService $wechatService): JsonResponse
+    public function wxIn(WechatService $wechatService)
     {
         $appid = $this->request->server->get('WX_APPID');
         $secret = $this->request->server->get('WX_SECRET');
@@ -64,7 +64,12 @@ class UserController extends Controller
             $info = $wechat->base($code);
             $openid = $info['openid'];
             $this->session->set('nefuer_openid', $openid);
-            return $this->signByOpenid();
+            if ($this->signByOpenid()) {
+                echo '<script>
+                window.location.assign(document.referrer);</script>';die;
+            } else {
+                return $this->route('sign');
+            }
         }
     }
 
@@ -84,10 +89,10 @@ class UserController extends Controller
                 $this->session->set('nefuer_account', $account);
                 $this->session->set('nefuer_password', $password);
             }
-            return $this->success();
+            return true;
         } else {
             //14、未绑定，返回登录
-            return $this->toSign();
+            return false;
         }
         
     }
