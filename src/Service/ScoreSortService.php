@@ -43,7 +43,7 @@ class ScoreSortService
         $oldItem = $scoreItemDb->listScores($account);
 
         $flag = true;
-        if (count($oldAll) === 0 && count($oldAll) === 0) {
+        if (count($oldAll) === 0 && count($oldItem) === 0) {
             $flag = false;
         }
         $avg = array();
