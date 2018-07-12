@@ -64,5 +64,6 @@ class RedisService
         if (false === $value) {
             return $default;
         }
+        return $value;
     }
 }
