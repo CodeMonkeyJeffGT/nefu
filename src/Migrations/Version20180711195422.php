@@ -16,7 +16,7 @@ final class Version20180711195422 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE `student` ADD UNIQUE KEY `student_unique_account`(`account`)');
-        $this->addSql('ALTER TABLE `student` ADD UNIQUE KEY `student_unqiue_openid`(`openid`)');
+        $this->addSql('ALTER TABLE `student` ADD KEY `student_openid`(`openid`)');
         $this->addSql('ALTER TABLE `student` ADD KEY `student_major_id`(`major_id`)');
         $this->addSql('ALTER TABLE `score_all` ADD KEY `score_all_account`(`account`)');
         $this->addSql('ALTER TABLE `score_item` ADD KEY `score_item_account`(`account`)');
@@ -32,7 +32,7 @@ final class Version20180711195422 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE `student` DROP KEY `student_unique_account`');
-        $this->addSql('ALTER TABLE `student` DROP KEY `student_unique_openid`');
+        $this->addSql('ALTER TABLE `student` DROP KEY `student_openid`');
         $this->addSql('ALTER TABLE `student` DROP KEY `student_major_id`');
         $this->addSql('ALTER TABLE `student` DROP KEY `score_all_account`');
         $this->addSql('ALTER TABLE `student` DROP KEY `score_item_account`');
