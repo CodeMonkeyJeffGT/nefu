@@ -24,7 +24,7 @@ class PermissionRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $permisisions = array();
         for ($i = 0, $len = count($data); $i < $len; $i++) {
-            $permisision = new Permisision();
+            $permisision = new Permission();
             $permisisions[] = $permisision;
             $permisision->setName($data[$i]['name']);
             $permisision->setAccount($data[$i]['account']);

@@ -67,7 +67,7 @@ abstract class Controller extends BaseController
         $account = $this->session->get('nefuer_account', null);
         $password = $this->session->get('nefuer_password', null);
         $cookie = $this->session->get('nefuer_cookie', null);
-        if (in_array(null, array($account, $password, $cookie))) {
+        if (in_array(null, array($account, $password))) {
             return false;
         }
         $nefuer = new Nefuer();

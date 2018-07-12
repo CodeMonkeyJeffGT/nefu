@@ -6,12 +6,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Nefu\Nefuer;
 use App\Entity\Student;
+use App\Entity\Permission;
 use App\Entity\College;
 use App\Entity\Major;
 use App\Service\WechatService;
 
 class UserController extends Controller
 {
+
     /**
      * 2、判断是否微信打开
      */
@@ -69,7 +71,7 @@ class UserController extends Controller
     /**
      * 通过openid登录
      */
-    private function signByOpenid(): JsonResponse
+    private function signByOpenid(WechatService $wechatService): JsonResponse
     {
         $openid = $this->session->get('openid');
         //6、根据openid获取用户信息
@@ -77,12 +79,12 @@ class UserController extends Controller
         //8、检查是否绑定
         if(true/* condition */) {
             //9、绑定：登录
-            $rst = $this->sign($account, $password);
+            $rst = $this->sign($wechatService, $account, $password);
             if (false === $rst) {
-
-            } else {
-                
+                $this->session->set('nefuer_account', $account);
+                $this->session->set('nefuer_password', $password);
             }
+            return $this->success();
         } else {
             //14、未绑定，返回登录
             return $this->toSign();
@@ -93,7 +95,7 @@ class UserController extends Controller
     /**
      * 登录
      */
-    public function sign($account = null, $password = null)
+    public function sign(WechatService $wechatService, $account = null, $password = null)
     {
         $local = ( ! is_null($account));
         $account  = $this->request->request->get('account');
@@ -121,13 +123,27 @@ class UserController extends Controller
         
         $studentDb = $this->getDoctrine()->getRepository(Student::class);
         $manager = $this->getDoctrine()->getEntityManager();
+        $openid = $this->session->get('nefuer_openid', '');
+        if ($openid != '') {
+            $student = $studentDb->createQueryBuilder('s')
+                ->andWhere('s.openid = :openid')
+                ->setParameter('openid', $openid)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+            if ( ! is_null($student) && $student->getAccount() != $account) {
+                $wechatService->sendUnbind($openid, $student->getAccount());
+                $student->setOpenid('');
+                $manager->persist($student);
+                $manager->flush();
+            }
+        }
         $student = $studentDb->createQueryBuilder('s')
             ->andWhere('s.account = :account')
             ->setParameter('account', $account)
             ->getQuery()
             ->getOneOrNullResult()
         ;
-        $openid = $this->session->get('nefuer_openid', '');
         if (is_null($student)) {
             $student = $nefuer->info();
             if ( ! isset($student['code'])) {
@@ -155,8 +171,28 @@ class UserController extends Controller
                     'grade' => (int)substr($account, 0, 4),
                 );
                 $studentDb->insert(array($student));
+                $permissionDb = $this->getDoctrine()->getRepository(Permission::class);
+                $permissionDb->insert(array(
+                    array(
+                        'name' => '成绩',
+                        'account' => $account,
+                        'permit' => true,
+                    ),
+                    array(
+                        'name' => '阶段成绩',
+                        'account' => $account,
+                        'permit' => true,
+                    ),
+                    array(
+                        'name' => '考试',
+                        'account' => $account,
+                        'permit' => true,
+                    ),
+                ));
             }
         } elseif ($openid != '' && $student->getOpenid() != $openid) {
+            $wechatService->sendUnbind($student->getOpenid(), $account);
+            $wechatService->sendbind($openid, $account);
             $student->setOpenid($openid);
             $student->setPassword($password);
             $manager->persist($student);

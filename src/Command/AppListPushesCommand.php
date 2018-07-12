@@ -9,23 +9,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Service\RedisService;
-use App\Service\ScoreSortService;
-use App\Service\WechatService;
 
-
-class AppSendScoreCommand extends Command
+class AppListPushesCommand extends Command
 {
-    protected static $defaultName = 'app:send-score';
+    protected static $defaultName = 'app:list-pushes';
     private $redisService;
-    private $scoreService;
-    private $wechatService;
 
-    public function __construct(RedisService $redisService, ScoreSortService $scoreService, WechatService $wechatService)
+    public function __construct(RedisService $redisService)
     {
         parent::__construct();
         $this->redisService = $redisService;
-        $this->scoreService = $scoreService;
-        $this->wechatService = $wechatService;
     }
 
     protected function configure()
@@ -34,7 +27,6 @@ class AppSendScoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
-    }
 
+    }
 }
