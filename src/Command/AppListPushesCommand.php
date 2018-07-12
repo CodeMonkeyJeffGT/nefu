@@ -39,7 +39,7 @@ class AppListPushesCommand extends Command
                         'openid' => $item['openid'],
                         'item' => $this->checkItem($item['account'], $list),
                     );
-                    $this->redisService->getRedis()->publish('exam', json_encode($info));
+                    $this->redisService->getRedis()->publish('score', json_encode($info));
                     break;
                 case '阶段成绩':
                     //nothing
