@@ -39,7 +39,7 @@ class PermissionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.name IN ("成绩", "阶段成绩", "考试")')
-            ->adnWhere('p.permit = 1')
+            ->andWhere('p.permit = 1')
             ->orderBy('p.name', 'ASC')
             ->getQuery()
             ->getResult()
