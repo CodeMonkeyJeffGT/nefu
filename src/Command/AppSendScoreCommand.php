@@ -34,13 +34,9 @@ class AppSendScoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // while (($data = $this->redisService->pop('score', null)) !== null) {
-        //     $data = json_decode($data);
-        // }
-        $this->redisService->subscribe(array('score'), function($instance, $channelName, $message) {
-            var_dump($instance);
-            var_dump($channelName);
-            var_dump($message);
+        $this->redisService->subscribe(array('score'), function($instance, $channelName, $data) {
+            $data = json_decode($data, true);
+            var_dump($data);
         });
     }
 

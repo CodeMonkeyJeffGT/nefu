@@ -32,9 +32,10 @@ class AppSendExamCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        while (($data = $this->redisService->pop('exam', null)) !== null) {
-            $data = json_decode($data);
-        }
+        $this->redisService->subscribe(array('score'), function($instance, $channelName, $data) {
+            $data = json_decode($data, true);
+            var_dump($data);
+        });
     }
 
 }
