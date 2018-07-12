@@ -14,6 +14,11 @@ class ScoreSortService
         $this->entityManager = $entityManager;
     }
 
+    public function getNefuer($account)
+    {
+        
+    }
+
     public function getScore($account, $nefuer = null): array
     {
         try {

@@ -37,14 +37,19 @@ class PermissionRepository extends ServiceEntityRepository
 
     public function listPushes(): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.name IN (:names)')
-            ->setParameter('names', array("成绩", "阶段成绩", "考试"))
-            ->andWhere('p.permit = 1')
-            ->orderBy('p.name', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT `p`.`name` `name`, `p`.`account` `account`, `s`.`openid`
+            FROM `permission` `p`
+            LEFT JOIN `student` `s`
+            ON `p`.`account` = `s`.`account`
+            WHERE `p`.`name` IN ("成绩", "阶段成绩", "考试")
+            AND `p`.`permit` = 1
+            AND `s`.`openid` <> ""
+            ORDER BY `p`.`name`
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
 //    /**

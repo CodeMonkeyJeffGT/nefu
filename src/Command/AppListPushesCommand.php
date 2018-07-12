@@ -32,28 +32,28 @@ class AppListPushesCommand extends Command
     {
         $list = $this->listPushesService->list();
         foreach ($list as $item) {
-            if ($item->getName() === '成绩') {
-                if ($this->checkItem($item->getAccount(), $list)) {
-                    $this->redisService->push('scoreWithItem', $item->getAccount());
-                } else {
-                    $this->redisService->push('scoreWithoutItem', $item->getAccount());
-                }
-            } else {
-                switch ($item->getName()) {
-                    case '考试':
-                        $this->redisService->push('exam', $item->getAccount());
-                        break;
-                    case '阶段成绩':
-                        //nothing
-                        break;
-                }
+            switch ($item['name']) {
+                case '成绩':
+                    $info = array(
+                        'account' => $item['account'],
+                        'openid' => $item['openid'],
+                        'item' => $this->checkItem($item['account'], $list),
+                    );
+                    $this->redisService->getRedis()->publish('exam', json_encode($info));
+                    break;
+                case '阶段成绩':
+                    //nothing
+                    break;
+                case '考试':
+                    $this->redisService->push('exam', $item['account']);
+                    break;
             }
         }
     }
 
     private function checkItem($account, $list) {
-        foreach ($list as $item) {
-            if ($item->getName() === '阶段成绩' && $item->getAccount() === $account) {
+        foreach ($list as $key => $item) {
+            if ($item['name'] === '阶段成绩' && $item['account'] === $account) {
                 return true;
             }
         }
