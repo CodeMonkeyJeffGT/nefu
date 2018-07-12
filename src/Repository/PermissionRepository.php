@@ -37,10 +37,13 @@ class PermissionRepository extends ServiceEntityRepository
 
     public function listPushes(): array
     {
-        return $this->findBy(array(
-            'name IN ("成绩", "阶段成绩", "考试")',
-            'permit = 1',
-        ));
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name IN ("成绩", "阶段成绩", "考试")')
+            ->adnWhere('p.permit = 1')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**
