@@ -34,11 +34,12 @@ class AppSendScoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->redisService->getRedis()->subscribe(array('score'), function($instance, $channelName, $message){
-            var_dump($instance);
-            var_dump($channelName);
-            var_dump($message);
-        });
+        while (($account = $this->redisService->pop('score'))) {
+            var_dump($account);
+        }
+        while (($account = $this->redisService->pop('exam'))) {
+            var_dump($account);
+        }
     }
 
 }
