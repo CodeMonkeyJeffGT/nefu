@@ -29,7 +29,7 @@ class WechatService
 
     public function sendBind($openid, $account)
     {
-        $url = UrlGeneratorInterface::ABSOLUTE_URL;
+        $url = $_SERVER['SERVER_NAME'];
         $template_id = 'Opw5l9pNNPJKu_Pm7tJVvdFcT02AKE1jKRqOyf5BQnk';
         $data = array(
             "first" => array(
@@ -54,7 +54,7 @@ class WechatService
 
     public function sendUnbind($openid, $account)
     {
-        $url = UrlGeneratorInterface::ABSOLUTE_URL;
+        $url = $_SERVER['SERVER_NAME'];
         $template_id = 'ggoURgkU3MwSZf7IC6WXU7dC3BZEcNMRzboymrAOK2Y';
         $data = array(
             "first" => array(
@@ -79,7 +79,7 @@ class WechatService
 
     public function sendScore($openid, $name, $score, $type, $num, $update = false)
     {
-        $url = UrlGeneratorInterface::ABSOLUTE_URL;
+        $url = 'http://nefuer.net';
         $template_id = 'Zu1NRhwKYW1jsdmD9dE8ukK3g4iCwKzKFy_wlfROMZE';
         $data = array(
             'first' => array(
