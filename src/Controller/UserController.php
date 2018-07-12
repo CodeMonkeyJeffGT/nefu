@@ -49,7 +49,7 @@ class UserController extends Controller
         $appid = $this->request->server->get('WX_APPID');
         $secret = $this->request->server->get('WX_SECRET');
         $wechat = $wechatService->getWechat();
-        if ( ! $this->request->request->has('code')) {
+        if ( ! $this->request->query->has('code')) {
             //4、获取openid
             $redirectUri = $this->generateUrl(
                 'wxIn',
@@ -60,15 +60,15 @@ class UserController extends Controller
             return $this->toUrl($url, '自动登录中');
         } else {
             //5、保存openid至session
-            $code = $this->request->request->has('code');
+            $code = $this->request->query->get('code');
             $info = $wechat->base($code);
             $openid = $info['openid'];
             $this->session->set('nefuer_openid', $openid);
-            if ($this->signByOpenid()) {
+            if ($this->signByOpenid($wechatService)) {
                 echo '<script>
                 window.location.assign(document.referrer);</script>';die;
             } else {
-                return $this->route('sign');
+                return $this->render('page/sign.html');
             }
         }
     }
@@ -76,15 +76,17 @@ class UserController extends Controller
     /**
      * 通过openid登录
      */
-    private function signByOpenid(WechatService $wechatService): JsonResponse
+    private function signByOpenid(WechatService $wechatService)
     {
         $openid = $this->session->get('openid');
         //6、根据openid获取用户信息
 
+        $studentDb = $this->getDoctrine()->getRepository(Student::class);
+        $user = $studentDb->findBy(array('openid' => $openid));
         //8、检查是否绑定
-        if(true/* condition */) {
+        if(count($user) > 0) {
             //9、绑定：登录
-            $rst = $this->sign($wechatService, $account, $password);
+            $rst = $this->sign($wechatService, $user[0]['account'], $user[0]['password']);
             if (false === $rst) {
                 $this->session->set('nefuer_account', $account);
                 $this->session->set('nefuer_password', $password);
