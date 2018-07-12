@@ -380,6 +380,7 @@ class ScoreSortService
                 'item' => array(),
             );
         }
+        arsort($terms);
         return array(
             'avg' => array(
                 'term' => $termAvg,
