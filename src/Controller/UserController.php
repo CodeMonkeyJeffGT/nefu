@@ -165,6 +165,7 @@ class UserController extends Controller
                 $student = array(
                     'account' => $account,
                     'password' => $password,
+                    'name' => $student['name'],
                     'openid' => $openid,
                     'majorId' => $majorId,
                     'sex' => $student['sex'],

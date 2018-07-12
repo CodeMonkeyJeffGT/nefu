@@ -54,6 +54,11 @@ class Student
     /**
      * @ORM\Column(type="string", length=32)
      */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
     private $nickname;
 
     public function getId()
@@ -141,6 +146,18 @@ class Student
     public function setSex(int $sex): self
     {
         $this->sex = $sex;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

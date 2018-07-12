@@ -28,12 +28,13 @@ class StudentRepository extends ServiceEntityRepository
             $students[] = $student;
             $student->setAccount($data[$i]['account']);
             $student->setPassword($data[$i]['password']);
+            $student->setName($data[$i]['name']);
             $student->setOpenid($data[$i]['openid']);
-            $student->setCreated(new \DateTime('now', new \DateTimeZone('PRC')));
+            $student->setCreated(isset($data[$i]['created']) ? $data[$i]['created'] : new \DateTime('now', new \DateTimeZone('PRC')));
             $student->setMajorId($data[$i]['majorId']);
             $student->setGrade($data[$i]['grade']);
             $student->setSex($data[$i]['sex']);
-            $student->setNickname($data[$i]['account']);
+            $student->setNickname($data[$i]['name']);
             $entityManager->persist($student);
         }
         $entityManager->flush();
