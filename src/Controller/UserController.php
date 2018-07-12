@@ -78,7 +78,7 @@ class UserController extends Controller
      */
     private function signByOpenid(WechatService $wechatService)
     {
-        $openid = $this->session->get('openid');
+        $openid = $this->session->get('nefuer_openid');
         //6、根据openid获取用户信息
 
         $studentDb = $this->getDoctrine()->getRepository(Student::class);
@@ -86,7 +86,7 @@ class UserController extends Controller
         //8、检查是否绑定
         if(count($user) > 0) {
             //9、绑定：登录
-            $rst = $this->sign($wechatService, $user[0]['account'], $user[0]['password']);
+            $rst = $this->sign($wechatService, $user[0]->getAccount(), $user[0]->getAccount());
             if (false === $rst) {
                 $this->session->set('nefuer_account', $account);
                 $this->session->set('nefuer_password', $password);
