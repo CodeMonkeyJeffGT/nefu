@@ -41,6 +41,12 @@ class UserController extends Controller
         }
     }
 
+    public function signOut()
+    {
+        $this->session->set('nefuer_account', null);
+        return $this->success();
+    }
+
     /**
      * 3、微信登录
      */

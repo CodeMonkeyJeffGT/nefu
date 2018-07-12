@@ -50,3 +50,7 @@ page-auto:
 page-permit:
     path: /permit
     controller: App\Controller\PageController::permit
+
+signout:
+    path: /signout
+    controller: App\Controller\UserController::signOut
