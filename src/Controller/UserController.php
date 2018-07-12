@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index(WechatService $wechatService): JsonResponse
     {
         if ($this->session->has('nefuer_openid')) {
-            return ($this->signByOpenid($wechatService)) ? $this->success() : $this->toSign();
+            return ($this->signByOpenid($wechatService)) ? $this->toUrl('/') : $this->toSign();
         } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             return $this->wxIn($wechatService);
         } else {
