@@ -31,13 +31,32 @@ class AppListPushesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $list = $this->listPushesService->list();
-        foreach ($list as $push) {
-            $this->redisService->push($push->getName(), $push->getAccount());
+        foreach ($list as $item) {
+            if ($item->getName() === '成绩') {
+                if ($this->checkItem($item->getAccount(), $list)) {
+                    $this->redisService->push('scoreWithItem', $item->getAccount());
+                } else {
+                    $this->redisService->push('scoreWithoutItem', $item->getAccount());
+                }
+            } else {
+                switch ($item->getName()) {
+                    case '考试':
+                        $this->redisService->push('exam', $item->getAccount());
+                        break;
+                    case '阶段成绩':
+                        //nothing
+                        break;
+                }
+            }
         }
-        echo '<pre>';
-        var_dump($this->redisService->getRedis()->lrange('成绩', 0, -1));
-        var_dump($this->redisService->getRedis()->lrange('阶段成绩', 0, -1));
-        var_dump($this->redisService->getRedis()->lrange('考试', 0, -1));
-        die;
+    }
+
+    private function checkItem($account, $list) {
+        foreach ($list as $item) {
+            if ($item->getName() === '阶段成绩' && $item->getAccount() === $account) {
+                return true;
+            }
+        }
+        return false;
     }
 }

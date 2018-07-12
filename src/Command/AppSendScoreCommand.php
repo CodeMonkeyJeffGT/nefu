@@ -30,7 +30,6 @@ class AppSendScoreCommand extends Command
 
     protected function configure()
     {
-        
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
