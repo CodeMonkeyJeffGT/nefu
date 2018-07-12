@@ -40,8 +40,6 @@ class PermissionRepository extends ServiceEntityRepository
         return $this->findBy(array(
             'name IN ("成绩", "阶段成绩", "考试")',
             'permit = 1',
-        ), array(
-            'name'
         ));
     }
 
