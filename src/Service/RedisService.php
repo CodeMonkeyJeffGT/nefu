@@ -67,6 +67,13 @@ class RedisService
         return $value;
     }
 
+    public function autoPop($name, $function)
+    {
+        while (($data = $this->pop($name)) !== null) {
+            $function($data);
+        }
+    }
+
     public function subscribe($name, $function)
     {
         $this->redis->subscribe($name, $function);

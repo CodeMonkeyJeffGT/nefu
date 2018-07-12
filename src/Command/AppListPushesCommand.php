@@ -34,7 +34,7 @@ class AppListPushesCommand extends Command
         foreach ($list as $item) {
             switch ($item['name']) {
                 case '成绩':
-                    $this->redisService->publish('score', json_encode(array(
+                    $this->redisService->push('score', json_encode(array(
                         'account' => $item['account'],
                         'openid' => $item['openid'],
                         'item' => $this->checkItem($item['account'], $list),
