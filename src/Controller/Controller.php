@@ -59,6 +59,20 @@ abstract class Controller extends BaseController
         ) + $this->errMsg + $errMsg;
     }
 
+    protected function toOpeUrl()
+    {
+        $ope = $this->session->get('nefuer_ope', 'page-score');
+        if (false !== strpos('://', $ope)) {
+            return $ope;
+        } else {
+            return $this->generateUrl(
+                $ope,
+                array(),
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
+    }
+
     /**
      * 获取nefuer对象
      */

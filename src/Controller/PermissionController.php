@@ -10,7 +10,7 @@ class PermissionController extends Controller
     public function getPermit()
     {
         if (false == $this->getNefuer()) {
-            return $this->toUrl('/auto');
+            return $this->toUrl('/auto?ope=page-permit');
         }
         $account = $this->session->get('nefuer_account');
         $permissionDb = $this->getDoctrine()->getRepository(Permission::class);

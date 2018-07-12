@@ -11,7 +11,7 @@ class ScoreController extends Controller
     {
         $nefuer = $this->getNefuer();
         if (false == $nefuer) {
-            return $this->toUrl('/auto');
+            return $this->toUrl('/auto?ope=page-score');
         }
         $score = $scoreSorter->getScore($nefuer->getAccount(), $nefuer);
         $this->session->set('nefuer_cookie', ($nefuer->getCookie()));
