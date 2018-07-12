@@ -41,14 +41,14 @@ class AppSendScoreCommand extends Command
             $scores = $this->scoreService->getScore($data['account'], $nefuer);
             $updates = $scores['update'];
             foreach ($updates['all'] as $update) {
-                $this->wechatService->sendScore(
+                var_dump($this->wechatService->sendScore(
                     $data['openid'],
                     $update['name'],
                     $update['score'],
                     '总成绩',
                     $update['num'],
                     $update['update']
-                );
+                ));
             }
             if ($data['item']) {
                 foreach ($updates['item'] as $update) {
@@ -72,14 +72,14 @@ class AppSendScoreCommand extends Command
                             $update['type'] = '期末';
                             break;
                     }
-                    $this->wechatService->sendScore(
+                    var_dump($this->wechatService->sendScore(
                         $data['openid'],
                         $update['name'],
                         $update['score'],
                         $update['type'],
                         $update['num'],
                         $update['update']
-                    );
+                    ));
                 }
             }
         });

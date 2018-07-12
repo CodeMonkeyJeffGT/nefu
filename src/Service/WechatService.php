@@ -49,7 +49,7 @@ class WechatService
                 "color" => "#173177"
             ),
         );
-        $this->wechat->tplMsg($openid, $template_id, $data, $url);
+        return $this->wechat->tplMsg($openid, $template_id, $data, $url);
     }
 
     public function sendUnbind($openid, $account)
@@ -74,7 +74,7 @@ class WechatService
                 "color" => "#173177"
             ),
         );
-        $this->wechat->tplMsg($openid, $template_id, $data, $url);
+        return $this->wechat->tplMsg($openid, $template_id, $data, $url);
     }
 
     public function sendScore($openid, $name, $score, $type, $num, $update = false)
@@ -107,6 +107,6 @@ class WechatService
 				'color' => '#173177'
 			)
         );
-        $this->wechat->tplMsg($openid, $template_id, $data, $url);
+        return $this->wechat->tplMsg($openid, $template_id, $data, $url);
     }
 }
