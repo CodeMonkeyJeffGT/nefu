@@ -36,6 +36,7 @@ class AppListPushesCommand extends Command
                 case '成绩':
                     $this->redisService->push('score', json_encode(array(
                         'account' => $item['account'],
+                        'password' => $item['password'],
                         'openid' => $item['openid'],
                         'item' => $this->checkItem($item['account'], $list),
                     )), 50000);
@@ -47,6 +48,7 @@ class AppListPushesCommand extends Command
                     //暂时不提供考试推送
                     // $this->redisService->push('exam', json_encode(array(
                     //     'account' => $item['account'],
+                    //     'password' => $item['password'],
                     //     'openid' => $item['openid'],
                     // )), 50000);
                     break;

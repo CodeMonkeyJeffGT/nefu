@@ -11,7 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Service\RedisService;
 use App\Service\ScoreSortService;
 use App\Service\WechatService;
-
+use Nefu\Nefuer;
 
 class AppSendScoreCommand extends Command
 {
@@ -36,7 +36,52 @@ class AppSendScoreCommand extends Command
     {
         $this->redisService->autoPop('score', function($data) {
             $data = json_decode($data, true);
-            var_dump($data);
+            $nefuer = new Nefuer();
+            $nefuer->login($data['account'], $data['password']);
+            $scores = $this->scoreService->getScore($data['account'], $nefuer);
+            $updates = $scores['update'];
+            foreach ($updates['all'] as $update) {
+                $this->wechatService->sendScore(
+                    $data['openid'],
+                    $update['name'],
+                    $update['score'],
+                    '总成绩',
+                    $update['num'],
+                    $update['update']
+                );
+            }
+            if ($data['item']) {
+                foreach ($updates['item'] as $update) {
+                    switch ($update['type']) {
+                        case 'itm1':
+                            $update['type'] = '阶段1';
+                            break;
+                        case 'itm2':
+                            $update['type'] = '阶段2';
+                            break;
+                        case 'itm3':
+                            $update['type'] = '阶段3';
+                            break;
+                        case 'nml':
+                            $update['type'] = '平时成绩';
+                            break;
+                        case 'mid':
+                            $update['type'] = '期中';
+                            break;
+                        case 'fin':
+                            $update['type'] = '期末';
+                            break;
+                    }
+                    $this->wechatService->sendScore(
+                        $data['openid'],
+                        $update['name'],
+                        $update['score'],
+                        $update['type'],
+                        $update['num'],
+                        $update['update']
+                    );
+                }
+            }
         });
     }
 

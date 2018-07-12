@@ -34,7 +34,7 @@ class AppSendExamCommand extends Command
     {
         $this->redisService->autoPop('exam', function($data) {
             $data = json_decode($data, true);
-            var_dump($data);
+            
         });
     }
 

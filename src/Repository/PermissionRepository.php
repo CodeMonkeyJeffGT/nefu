@@ -38,7 +38,7 @@ class PermissionRepository extends ServiceEntityRepository
     public function listPushes(): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT `p`.`name` `name`, `p`.`account` `account`, `s`.`openid`
+        $sql = 'SELECT `p`.`name` `name`, `p`.`account` `account`, `s`.`password` `password` `s`.`openid`
             FROM `permission` `p`
             LEFT JOIN `student` `s`
             ON `p`.`account` = `s`.`account`
