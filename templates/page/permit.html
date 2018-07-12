@@ -111,6 +111,16 @@
                 url: '/api/v1/getPermit',
                 method: 'get',
                 success: function(result) {
+					switch (result.code) {
+						case 6:
+							window.location.assign(result.data);
+							return false;
+						case 1:
+							window.open('/sign', '_blank');
+							return false;
+						case 0:
+							break;
+					}
                     if (result.code !== 0) {
                         alert(result.message);
                     }
