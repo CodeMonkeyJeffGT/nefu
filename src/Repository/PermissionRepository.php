@@ -35,6 +35,16 @@ class PermissionRepository extends ServiceEntityRepository
         return $permisisions;
     }
 
+    public function listPushes(): array
+    {
+        return $this->findBy(array(
+            'name IN ("成绩", "阶段成绩", "考试")',
+            'permit = 1',
+        ), array(
+            'name'
+        ));
+    }
+
 //    /**
 //     * @return Permission[] Returns an array of Permission objects
 //     */
