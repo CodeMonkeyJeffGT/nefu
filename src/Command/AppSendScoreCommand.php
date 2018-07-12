@@ -37,7 +37,7 @@ class AppSendScoreCommand extends Command
         // while (($data = $this->redisService->pop('score', null)) !== null) {
         //     $data = json_decode($data);
         // }
-        $this->redisService->subscribe('score', function($instance, $channelName, $message) {
+        $this->redisService->subscribe(array('score'), function($instance, $channelName, $message) {
             var_dump($instance);
             var_dump($channelName);
             var_dump($message);
