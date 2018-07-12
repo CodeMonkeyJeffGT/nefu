@@ -385,7 +385,7 @@ class ScoreSortService
                 'item' => array(),
             );
         }
-        arsort($terms);
+        ksort($terms);
         return array(
             'avg' => array(
                 'term' => $termAvg,
