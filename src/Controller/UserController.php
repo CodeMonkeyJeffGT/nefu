@@ -17,12 +17,12 @@ class UserController extends Controller
     /**
      * 2、判断是否微信打开
      */
-    public function index(): JsonResponse
+    public function index(WechatService $wechatService): JsonResponse
     {
         if ($this->session->has('openid')) {
             return $this->signByOpenid($this->request, $this->session);
         } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-            return $this->wxIn();
+            return $this->wxIn($wechatService);
         } else {
             return $this->toSign();
         }
