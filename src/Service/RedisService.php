@@ -66,4 +66,14 @@ class RedisService
         }
         return $value;
     }
+
+    public function subscribe($name, $function)
+    {
+        $this->redis->subscribe($name, $function);
+    }
+
+    public function publish($name, $data)
+    {
+        $this->redis->publish($name, $data);
+    }
 }

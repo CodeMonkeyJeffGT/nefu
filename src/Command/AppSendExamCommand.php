@@ -13,18 +13,16 @@ use App\Service\ScoreSortService;
 use App\Service\WechatService;
 
 
-class AppSendScoreCommand extends Command
+class AppSendExamCommand extends Command
 {
-    protected static $defaultName = 'app:send-score';
+    protected static $defaultName = 'app:send-exam';
     private $redisService;
-    private $scoreService;
     private $wechatService;
 
     public function __construct(RedisService $redisService, ScoreSortService $scoreService, WechatService $wechatService)
     {
         parent::__construct();
         $this->redisService = $redisService;
-        $this->scoreService = $scoreService;
         $this->wechatService = $wechatService;
     }
 
@@ -34,14 +32,9 @@ class AppSendScoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // while (($data = $this->redisService->pop('score', null)) !== null) {
-        //     $data = json_decode($data);
-        // }
-        $this->redisService->subscribe('score', function($instance, $channelName, $message) {
-            var_dump($instance);
-            var_dump($channelName);
-            var_dump($message);
-        });
+        while (($data = $this->redisService->pop('exam', null)) !== null) {
+            $data = json_decode($data);
+        }
     }
 
 }

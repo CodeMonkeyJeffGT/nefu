@@ -34,7 +34,7 @@ class AppListPushesCommand extends Command
         foreach ($list as $item) {
             switch ($item['name']) {
                 case '成绩':
-                    $this->redisService->push('score', json_encode(array(
+                    $this->redisService->publish('score', json_encode(array(
                         'account' => $item['account'],
                         'openid' => $item['openid'],
                         'item' => $this->checkItem($item['account'], $list),
@@ -44,10 +44,11 @@ class AppListPushesCommand extends Command
                     //nothing
                     break;
                 case '考试':
-                    $this->redisService->push('exam', json_encode(array(
-                        'account' => $item['account'],
-                        'openid' => $item['openid'],
-                    )));
+                    //暂时不提供考试推送
+                    // $this->redisService->push('exam', json_encode(array(
+                    //     'account' => $item['account'],
+                    //     'openid' => $item['openid'],
+                    // )));
                     break;
             }
         }
