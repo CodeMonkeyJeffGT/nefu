@@ -31,6 +31,6 @@ class AppListPushesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         echo '<pre>';
-        var_dump($listPushesService->list());die;
+        var_dump($this->listPushesService->list());die;
     }
 }
