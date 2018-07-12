@@ -59,7 +59,7 @@ abstract class Controller extends BaseController
         ) + $this->errMsg + $errMsg;
     }
 
-    protected function toOpeUrl()
+    protected function getOpeUrl()
     {
         $ope = $this->session->get('nefuer_ope', 'page-score');
         if (false !== strpos('://', $ope)) {

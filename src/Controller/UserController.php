@@ -65,7 +65,7 @@ class UserController extends Controller
             $openid = $info['openid'];
             $this->session->set('nefuer_openid', $openid);
             if ($this->signByOpenid($wechatService)) {
-                return $this->redirect($this->toOpeUrl());
+                return $this->redirect($this->getOpeUrl());
             } else {
                 return $this->redirectToRoute('page-sign');
             }
@@ -123,7 +123,7 @@ class UserController extends Controller
                 if ($local) {
                     return false;
                 } else {
-                    return $this->success();
+                    return $this->toUrl($this->getOpeUrl());
                 }
             case 201:
                 return $this->error(null, '账号或密码错误');
