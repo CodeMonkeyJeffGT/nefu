@@ -165,6 +165,7 @@ class ScoreSortService
                     if ( ! isset($oldItem[$key]['id'])) {
                         var_dump($oldItem);
                         var_dump($key);
+                        var_dump($this->existScoreItem($score, $oldItem, true));
                         var_dump($oldItem[$key]);
                         die;
                     }
@@ -654,10 +655,16 @@ class ScoreSortService
         return false;
     }
 
-    private function existScoreItem($score, $arr)
+    private function existScoreItem($score, $arr, $debug = false)
     {
         foreach ($arr as $key => $value) {
             if ($score['code'] === $value['code'] && $score['type'] === $value['type']) {
+                if ($debug) {
+                    var_dump($score['code']);
+                    var_dump($value['code']);
+                    var_dump($score['type']);
+                    var_dump($value['type']);
+                }
                 return $key;
             }
         }
