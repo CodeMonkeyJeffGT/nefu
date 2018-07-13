@@ -9,42 +9,27 @@
 <body>
     <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
     <script>
-        $(function(){
-            $.ajax({
-                'url': '/api/v1/checkSign',
-                'method': 'get',
-                'success': function(result) {
-                    switch(result.code) {
-                        case 2:
-                            $.ajax({
-                                'url': '/api/v1/',
-                                'method': 'post',
-                                'success': function(result) {
-                                    switch (result.code) {
-                                        case 6:
-                                            $("html").html(result.message);
-                                            window.location.assign(result.data);
-                                            return false;
-                                        case 1:
-                                            window.location.assign('/sign');
-                                            return false;
-                                        case 0:
-                                            break;
-                                        case 2:
-                                            //no break;
-                                        default:
-                                            alert(result.message + "\n错误代码：" + result.code);
-                                            return false;
-                                    }
-                                }
-                            });
-                            break;
-                        case 0:
-                            window.location.assign(document.referrer);
-                            break;
-                    }
+        $.ajax({
+            'url': '/api/v1/',
+            'method': 'post',
+            'success': function(result) {
+                switch (result.code) {
+                    case 6:
+                        $("html").html(result.message);
+                        window.location.assign(result.data);
+                        return false;
+                    case 1:
+                        window.location.assign('/sign');
+                        return false;
+                    case 0:
+                        break;
+                    case 2:
+                        //no break;
+                    default:
+                        alert(result.message + "\n错误代码：" + result.code);
+                        return false;
                 }
-            });
+            }
         });
     </script>
 </body>

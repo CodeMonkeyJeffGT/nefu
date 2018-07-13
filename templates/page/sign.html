@@ -83,13 +83,6 @@
 							alert(result.message + "\n错误代码：" + result.code);
 							return false;
 					}
-					if (document.referrer.substr(document.referrer.length - 4, 4) == 'auto') {
-						history.go(-2);
-					} else {
-						history.go(-1);
-					}
-					window.opener.location.href = window.opener.document.referrer;
-					window.close();
 					return false;
 				}
 			});
