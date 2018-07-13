@@ -659,7 +659,11 @@ class ScoreSortService
     private function existScoreItem($score, $arr)
     {
         foreach ($arr as $key => $value) {
-            if ($score['code'] === $value['code'] && $score['type'] === $value['type']) {
+            if (
+                $score['code'] === $value['code']
+                && $score['type'] === $value['type']
+                && $score['term'] === $value['term']
+            ) {
                 return $key;
             }
         }
