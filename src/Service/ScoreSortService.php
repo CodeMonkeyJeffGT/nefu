@@ -162,7 +162,7 @@ class ScoreSortService
             if ($key !== false) {
                 if ($score['score'] != $oldItem[$key]['score']) {
                     $oldItem[$key]['score'] = $score['score'];
-                    if ( ! isset($oldItem[$key]['id']) {
+                    if ( ! isset($oldItem[$key]['id'])) {
                         var_dump($oldItem);
                         var_dump($key);
                         var_dump($oldItem[$key]);
