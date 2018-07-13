@@ -100,7 +100,9 @@ class ScoreSortService
                 );
             }
         }
+        $ss = $scoreItem;
         $scoreItem = $scoreItemList;
+        $ss2 = $scoreItem;
         unset($scoreItemList);
 
         //总成绩判断更新
@@ -163,12 +165,9 @@ class ScoreSortService
                 if ($score['score'] != $oldItem[$key]['score']) {
                     $oldItem[$key]['score'] = $score['score'];
                     if ( ! isset($oldItem[$key]['id'])) {
-                        var_dump($oldItem);
-                        var_dump($key);
+                        var_dump($ss);
                         var_dump($scoreItem);
-                        var_dump($score);
-                        var_dump($this->existScoreItem($score, $oldItem, true));
-                        var_dump($oldItem[$key]);
+                        var_dump($ss2);
                         die;
                     }
                     $updateItem[] = array(
@@ -657,16 +656,10 @@ class ScoreSortService
         return false;
     }
 
-    private function existScoreItem($score, $arr, $debug = false)
+    private function existScoreItem($score, $arr)
     {
         foreach ($arr as $key => $value) {
             if ($score['code'] === $value['code'] && $score['type'] === $value['type']) {
-                if ($debug) {
-                    var_dump($score['code']);
-                    var_dump($value['code']);
-                    var_dump($score['type']);
-                    var_dump($value['type']);
-                }
                 return $key;
             }
         }
