@@ -95,6 +95,8 @@ class UserController extends Controller
             if (false === $rst) {
                 $this->session->set('nefuer_account', $user[0]->getAccount());
                 $this->session->set('nefuer_password', $user[0]->getPassword());
+            } elseif (null === $rst) {
+                return false;
             }
             return true;
         } else {
@@ -132,7 +134,11 @@ class UserController extends Controller
                     return $this->toUrl($this->getOpeUrl());
                 }
             case 201:
-                return $this->error(null, '账号或密码错误');
+                if ($local) {
+                    return null;
+                } else {
+                    return $this->error(null, '账号或密码错误');
+                }
         }
         
         $studentDb = $this->getDoctrine()->getRepository(Student::class);
