@@ -127,8 +127,8 @@
                     result = result.data;
                     console.log(result.成绩 == 1);
                     console.log(result.阶段成绩 == 1);
-                    $("[name='score-switch']").bootstrapSwitch('state', result.成绩 == 1);
                     $("[name='item-switch']").bootstrapSwitch('state', result.阶段成绩 == 1);
+                    $("[name='score-switch']").bootstrapSwitch('state', result.成绩 == 1);
                     user = true;
                 },
                 error: function(result) {

@@ -229,6 +229,10 @@ class UserController extends Controller
         $this->session->set('nefuer_account', $account);
         $this->session->set('nefuer_password', $password);
         $this->session->set('nefuer_cookie', $nefuer->getCookie());
-        return $this->toUrl($this->getOpeUrl());
+        if ($local) {
+            return true;
+        } else {
+            return $this->toUrl($this->getOpeUrl());
+        }
     }
 }
