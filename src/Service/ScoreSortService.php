@@ -162,10 +162,17 @@ class ScoreSortService
             if ($key !== false) {
                 if ($score['score'] != $oldItem[$key]['score']) {
                     $oldItem[$key]['score'] = $score['score'];
-                    $updateItem[] = array(
-                        'id' => $oldItem[$key]['id'],
-                        'score' => $oldItem[$key]['score'],
-                    );
+                    try{
+                        $updateItem[] = array(
+                            'id' => $oldItem[$key]['id'],
+                            'score' => $oldItem[$key]['score'],
+                        );
+                    } catch (\Exception $e) {
+                        var_dump($oldItem);
+                        var_dump($key);
+                        var_dump($oldItem[$key]);
+                        die;
+                    }
                     $update['item'][] = array(
                         'name' => $oldItem[$key]['name'],
                         'score' => $oldItem[$key]['score'],
