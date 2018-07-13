@@ -165,6 +165,7 @@ class ScoreSortService
                     if ( ! isset($oldItem[$key]['id'])) {
                         var_dump($oldItem);
                         var_dump($key);
+                        var_dump($score);
                         var_dump($this->existScoreItem($score, $oldItem, true));
                         var_dump($oldItem[$key]);
                         die;
