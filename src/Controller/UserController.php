@@ -131,7 +131,7 @@ class UserController extends Controller
                 if ($local) {
                     return false;
                 } else {
-                    return $this->error(null, '教务系统异常'));
+                    return $this->error(null, '教务系统异常');
                 }
             case 201:
                 if ($local) {
