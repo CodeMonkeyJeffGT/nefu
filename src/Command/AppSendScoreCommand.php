@@ -38,8 +38,7 @@ class AppSendScoreCommand extends Command
             $data = json_decode($data, true);
             $nefuer = new Nefuer();
             $nefuer->login($data['account'], $data['password']);
-            $scores = $this->scoreService->getScore($data['account'], $nefuer);
-            $updates = $scores['update'];
+            $updates = $this->scoreService->getScoreForPush($data['account'], $nefuer);
             foreach ($updates['all'] as $update) {
                 $rst = $this->wechatService->sendScore(
                     $data['openid'],

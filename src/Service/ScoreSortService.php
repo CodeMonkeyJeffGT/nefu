@@ -19,6 +19,247 @@ class ScoreSortService
         
     }
 
+    public function getScoreForPush($account, $nefuer = null): array
+    {
+        try {
+            $scoreAll = $nefuer->scoreAll();
+            $scoreItem = $nefuer->scoreItem();
+            if (isset($scoreAll['code']) || isset($scoreItem['code'])) {
+                throw new \Exception('成绩获取失败');
+            }
+        } catch (\Exception $e) {
+            return array(
+                'all' => array(),
+                'item' => array(),
+            );
+        }
+
+        $lessonDb = $this->entityManager->getRepository(Lesson::class);
+        $scoreAllDb = $this->entityManager->getRepository(ScoreAll::class);
+        $scoreItemDb = $this->entityManager->getRepository(ScoreItem::class);
+        $oldAll = $scoreAllDb->listScores($account);
+        $oldItem = $scoreItemDb->listScores($account);
+
+        $flag = true;
+        if (count($oldAll) === 0 && count($oldItem) === 0) {
+            $flag = false;
+        }
+        $avg = array();
+        $update = array(
+            'all' => array(),
+            'item' => array(),
+        );
+
+        $lessonNeed = array();
+        $updateAll = array();
+        $newAll = array();
+        $updateItem = array();
+        $newItem = array();
+
+        //阶段更改结构
+        $scoreItemList = array();
+        foreach ($scoreItem as $score) {
+            foreach ($score['item'] as $key => $item) {
+                $scoreItemList[] = array(
+                    'score' => $item,
+                    'code' => $score['code'],
+                    'name' => $score['name'],
+                    'num' => $score['num'],
+                    'term' => $score['term'],
+                    'type' => 'itm' . ($key + 1),
+                );
+            }
+            if ($score['normal'] != '') {
+                $scoreItemList[] = array(
+                    'score' => $score['normal'],
+                    'code' => $score['code'],
+                    'name' => $score['name'],
+                    'num' => $score['num'],
+                    'term' => $score['term'],
+                    'type' => 'nml',
+                );
+            }
+            if ($score['mid'] != '') {
+                $scoreItemList[] = array(
+                    'score' => $score['mid'],
+                    'code' => $score['code'],
+                    'name' => $score['name'],
+                    'num' => $score['num'],
+                    'term' => $score['term'],
+                    'type' => 'mid',
+                );
+            }
+            if ($score['fin'] != '') {
+                $scoreItemList[] = array(
+                    'score' => $score['fin'],
+                    'code' => $score['code'],
+                    'name' => $score['name'],
+                    'num' => $score['num'],
+                    'term' => $score['term'],
+                    'type' => 'fin',
+                );
+            }
+        }
+        $scoreItem = $scoreItemList;
+        unset($scoreItemList);
+
+        //总成绩判断更新
+        foreach ($scoreAll['score'] as $score) {
+            if ($score['status'] != 'done') {
+                continue;
+            }
+            $key = $this->existScore($score, $oldAll);
+            if ($key !== false) {
+                if ($score['score'] != $oldAll[$key]['score']) {
+                    $oldAll[$key]['score'] = $score['score'];
+                    $updateAll[] = array(
+                        'id' => $oldAll[$key]['id'],
+                        'score' => $oldAll[$key]['score'],
+                    );
+                    $update['all'][] = array(
+                        'name' => $oldAll[$key]['name'],
+                        'score' => $oldAll[$key]['score'],
+                        'num' => $oldAll[$key]['num'],
+                        'update' => true,
+                    );
+                }
+            } else {
+                $lessonNeed[$score['code']] = array(
+                    'name' => $score['name'],
+                );
+
+                $newAll[] = array(
+                    'account' => $account,
+                    'code' => $score['code'],
+                    'name' => $score['name'],
+                    'score' => $score['score'],
+                    'num' => $score['num'],
+                    'term' => $score['term'],
+                    'type' => $score['type'],
+                );
+                $update['all'][] = array(
+                    'name' => $score['name'],
+                    'score' => $score['score'],
+                    'num' => $score['num'],
+                    'update' => false,
+                );
+                $oldAll = array_merge(array(
+                    array(
+                        'score' => $score['score'],
+                        'code' => $score['code'],
+                        'name' => $score['name'],
+                        'term' => $score['term'],
+                        'type' => $score['type'],
+                        'num' => $score['num'],
+                    ),
+                ), $oldAll);
+            }
+        }
+
+        //阶段判断更新
+        foreach ($scoreItem as $score) {
+            $key = $this->existScoreItem($score, $oldItem);
+            if ($key !== false) {
+                if ($score['score'] != $oldItem[$key]['score']) {
+                    $oldItem[$key]['score'] = $score['score'];
+                    $updateItem[] = array(
+                        'id' => $oldItem[$key]['id'],
+                        'score' => $oldItem[$key]['score'],
+                    );
+                    $update['item'][] = array(
+                        'name' => $oldItem[$key]['name'],
+                        'score' => $oldItem[$key]['score'],
+                        'type' => $oldItem[$key]['type'],
+                        'num' => $score['num'],
+                        'update' => true,
+                    );
+                }
+            } else {
+                $lessonNeed[$score['code']] = array(
+                    'name' => $score['name'],
+                );
+
+                $newItem[] = array(
+                    'account' => $account,
+                    'code' => $score['code'],
+                    'name' => $score['name'],
+                    'score' => $score['score'],
+                    'term' => $score['term'],
+                    'type' => $score['type'],
+                    'num' => $score['num'],
+                );
+                $update['item'][] = array(
+                    'name' => $score['name'],
+                    'score' => $score['score'],
+                    'type' => $score['type'],
+                    'num' => $score['num'],
+                    'update' => false,
+                );
+                $oldItem = array_merge(array(
+                    array(
+                        'score' => $score['score'],
+                        'code' => $score['code'],
+                        'name' => $score['name'],
+                        'term' => $score['term'],
+                        'type' => $score['type'],
+                    ),
+                ), $oldItem);
+            }
+        }
+
+        //课程获取id
+        if (count($lessonNeed) > 0) {
+            $lessonNeed = $lessonDb->getIds($lessonNeed);
+        }
+
+        foreach ($newAll as $key => $value) {
+            $newAll[$key] = array(
+                'account' => $value['account'],
+                'score' => $value['score'],
+                'term' => $value['term'],
+                'lessonId' => $lessonNeed[$value['code']],
+                'type' => $value['type'],
+                'num' => $value['num'],
+            );
+        }
+
+        foreach ($newItem as $key => $value) {
+            $newItem[$key] = array(
+                'account' => $value['account'],
+                'score' => $value['score'],
+                'term' => $value['term'],
+                'lessonId' => $lessonNeed[$value['code']],
+                'type' => $value['type'],
+            );
+        }
+
+        //总成绩插入更新
+        if (count($updateAll) > 0) {
+            $scoreAllDb->update($updateAll);
+        }
+        //总成绩插入新增
+        if (count($newAll) > 0) {
+            $scoreAllDb->insert($newAll);
+        }
+        //阶段插入更新
+        if (count($updateItem) > 0) {
+            $scoreItemDb->update($updateItem);
+        }
+        //阶段插入新增
+        if (count($newItem) > 0) {
+            $scoreItemDb->insert($newItem);
+        }
+
+        if ( ! $flag) {
+            $update = array(
+                'all' => array(),
+                'item' => array(),
+            );
+        }
+        return $update;
+
+    }
+
     public function getScore($account, $nefuer = null): array
     {
         try {
