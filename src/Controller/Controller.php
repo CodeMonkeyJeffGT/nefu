@@ -63,6 +63,7 @@ abstract class Controller extends BaseController
     protected function getOpeUrl()
     {
         $ope = $this->session->get('nefuer_ope', 'page-score');
+        $this->session->set('nefuer_ope', null);
         if (false !== strpos('://', $ope)) {
             return $ope;
         } else {
