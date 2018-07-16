@@ -35,51 +35,55 @@ class AppSendScoreCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->redisService->autoPop('score', function($data) {
-            $data = json_decode($data, true);
-            $nefuer = new Nefuer();
-            $nefuer->login($data['account'], $data['password']);
-            $updates = $this->scoreService->getScoreForPush($data['account'], $nefuer);
-            foreach ($updates['all'] as $update) {
-                $rst = $this->wechatService->sendScore(
-                    $data['openid'],
-                    $update['name'],
-                    $update['score'],
-                    '总成绩',
-                    $update['num'],
-                    $update['update']
-                );
-            }
-            if ($data['item']) {
-                foreach ($updates['item'] as $update) {
-                    switch ($update['type']) {
-                        case 'itm1':
-                            $update['type'] = '阶段1';
-                            break;
-                        case 'itm2':
-                            $update['type'] = '阶段2';
-                            break;
-                        case 'itm3':
-                            $update['type'] = '阶段3';
-                            break;
-                        case 'nml':
-                            $update['type'] = '平时成绩';
-                            break;
-                        case 'mid':
-                            $update['type'] = '期中';
-                            break;
-                        case 'fin':
-                            $update['type'] = '期末';
-                            break;
-                    }
+            try {
+                $data = json_decode($data, true);
+                $nefuer = new Nefuer();
+                $nefuer->login($data['account'], $data['password']);
+                $updates = $this->scoreService->getScoreForPush($data['account'], $nefuer);
+                foreach ($updates['all'] as $update) {
                     $rst = $this->wechatService->sendScore(
                         $data['openid'],
                         $update['name'],
                         $update['score'],
-                        $update['type'],
+                        '总成绩',
                         $update['num'],
                         $update['update']
                     );
                 }
+                if ($data['item']) {
+                    foreach ($updates['item'] as $update) {
+                        switch ($update['type']) {
+                            case 'itm1':
+                                $update['type'] = '阶段1';
+                                break;
+                            case 'itm2':
+                                $update['type'] = '阶段2';
+                                break;
+                            case 'itm3':
+                                $update['type'] = '阶段3';
+                                break;
+                            case 'nml':
+                                $update['type'] = '平时成绩';
+                                break;
+                            case 'mid':
+                                $update['type'] = '期中';
+                                break;
+                            case 'fin':
+                                $update['type'] = '期末';
+                                break;
+                        }
+                        $rst = $this->wechatService->sendScore(
+                            $data['openid'],
+                            $update['name'],
+                            $update['score'],
+                            $update['type'],
+                            $update['num'],
+                            $update['update']
+                        );
+                    }
+                }
+            } catch (\Exception $e) {
+                //nothing;
             }
         });
     }
