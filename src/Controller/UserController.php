@@ -97,6 +97,7 @@ class UserController extends Controller
             if (false === $rst) {
                 $this->session->set('nefuer_account', $user[0]->getAccount());
                 $this->session->set('nefuer_password', $user[0]->getPassword());
+                return true;
             } elseif (null === $rst) {
                 return false;
             }
