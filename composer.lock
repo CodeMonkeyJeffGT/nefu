@@ -1041,16 +1041,16 @@
         },
         {
             "name": "gutian/nefu",
-            "version": "1.0.8",
+            "version": "1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodeMonkeyJeffGT/nefuer.git",
-                "reference": "a4070484bcf743bad14943e4a6072fab15a31269"
+                "reference": "ec553a35c8b1347f0aae597297f1cfa640707c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/nefuer/zipball/a4070484bcf743bad14943e4a6072fab15a31269",
-                "reference": "a4070484bcf743bad14943e4a6072fab15a31269",
+                "url": "https://api.github.com/repos/CodeMonkeyJeffGT/nefuer/zipball/ec553a35c8b1347f0aae597297f1cfa640707c2e",
+                "reference": "ec553a35c8b1347f0aae597297f1cfa640707c2e",
                 "shasum": ""
             },
             "require": {
@@ -1073,7 +1073,7 @@
                 }
             ],
             "description": "教务系统爬虫库",
-            "time": "2018-07-18T02:45:01+00:00"
+            "time": "2018-07-20T04:07:17+00:00"
         },
         {
             "name": "gutian/wechat",
