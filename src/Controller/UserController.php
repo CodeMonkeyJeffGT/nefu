@@ -250,7 +250,7 @@ class UserController extends Controller
         {
             $this->session->set('nefuer_account', $account);
             $this->session->set('nefuer_password', $password);
-            return true;
+            return $this->toUrl($this->getOpeUrl());
         }
         return $this->error(null, '教务系统异常');
     }
