@@ -237,7 +237,7 @@ class UserController extends Controller
         }
     }
 
-    private function outline ()
+    private function outline($account, $password)
     {
         $studentDb = $this->getDoctrine()->getRepository(Student::class);
         $student = $studentDb->createQueryBuilder('s')
