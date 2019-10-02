@@ -134,7 +134,7 @@ class UserController extends Controller
                 if ($local) {
                     return false;
                 } else {
-                    return $this->error(null, '教务系统异常');
+                    return $this->outline($account, $password);
                 }
             case 201:
                 if ($local) {
@@ -235,5 +235,23 @@ class UserController extends Controller
         } else {
             return $this->toUrl($this->getOpeUrl());
         }
+    }
+
+    private function outline ()
+    {
+        $studentDb = $this->getDoctrine()->getRepository(Student::class);
+        $student = $studentDb->createQueryBuilder('s')
+            ->andWhere('s.account = :account')
+            ->setParameter('account', $account)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+        if (( ! is_null($student)) && $password == $student->getPassword())
+        {
+            $this->session->set('nefuer_account', $account);
+            $this->session->set('nefuer_password', $password);
+            return true;
+        }
+        return $this->error(null, '教务系统异常');
     }
 }
